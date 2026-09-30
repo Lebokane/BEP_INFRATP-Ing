@@ -12,7 +12,7 @@ const LEA = require('../modules/chaussees/engine.js');
 
 const close = (a, b, rel, msg) => assert.ok(Math.abs(a - b) <= rel * Math.abs(b), `${msg} : ${a} au lieu de ${b}`);
 
-const bceomP = { Q: 15, B: 3, D: 2, N: 2, Ks: 67, g: 9.8, slope: 0.005, slopeMode: 'critical', hlimit: 1.25, fill: 80, vmax: 4, Bmax: 6, Dmax: 5, step: 0.5 };
+const bceomP = { Q: 15, B: 3, D: 2, N: 2, Ks: 67, g: 9.81, slope: 0.005, slopeMode: 'critical', hlimit: 1.25, fill: 80, vmax: 4, Bmax: 6, Dmax: 5, step: 0.5 };
 const fhwaP = { Q: 15, B: 3, D: 2, N: 2, L: 20, n: 1 / 67, TW: 0.5, HW: 3, crest: 3.5, freeboard: 0.5, fill: 80, vmin: 0.5, vmax: 5, Bmax: 6, Dmax: 4, S: 0.005, inlet: 'flared', freeFlow: true };
 
 test('BCEOM : à la pente critique, le tirant uniforme égale le tirant critique', () => {
@@ -40,6 +40,22 @@ test('BCEOM : les propositions satisfont tous les critères', () => {
 test('FHWA : le débit capable donne le niveau amont admissible', () => {
   const cap = FHWA.capacity(3, 2, 2, fhwaP);
   close(FHWA.heads(cap, 3, 2, 2, fhwaP).hw, FHWA.limits(fhwaP), 1e-6, 'HW');
+});
+
+test('FHWA : en entrée noyée, correction de pente −0,5·S (HDS-5, éq. A.3)', () => {
+  assert.equal(FHWA.KS, -0.5);
+  const p = { ...fhwaP, inlet: 'flared' }, q = 80;   // débit fortement noyé
+  const c = FHWA.coeff('flared', 2), x = 1.811 * q / (2 * 3 * 2 * Math.sqrt(2));
+  assert.equal(FHWA.inlet(q, 3, 2, 2, p).zone, 'Entrée noyée');
+  close(FHWA.inlet(q, 3, 2, 2, p).hw / 2, c.c * x * x + c.Y - 0.5 * p.S, 1e-12, 'HWi/D');
+});
+
+test('FHWA : courbe HWi continue aux raccordements', () => {
+  for (const inlet of ['flared', 'parallel', 'bevel']) for (const N of [1, 2]) for (const S of [0.001, 0.02, 0.1]) {
+    const p = { inlet, S }, t = FHWA.transition(FHWA.coeff(inlet, N), S);
+    const f = x => FHWA.inlet(x * N * 3 * 2 * Math.sqrt(2) / 1.811, 3, 2, N, p).hw / 2;
+    for (const x0 of [t.x1, t.x2]) assert.ok(Math.abs(f(x0 - 1e-7) - f(x0 + 1e-7)) < 1e-4, `${inlet} N=${N} S=${S}`);
+  }
 });
 
 test('Contre-vérification BCEOM / FHWA : hauteur amont à moins de 5 %', () => {

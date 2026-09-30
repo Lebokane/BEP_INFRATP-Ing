@@ -1,16 +1,16 @@
-# Suite Ingénierie — plateforme modulaire d’outils d’études
+# Kalc Systems — plateforme modulaire d’outils d’études
 
 Plateforme qui regroupe des outils de calcul d’ingénierie (hydrologie, hydraulique routière, chaussées…)
 et se **personnalise par client** : marque, logo, couleurs et modules sous licence.
-Le même code produit la version INFRATP, la version d’un autre bureau d’études, et plus tard la version SaaS.
+Premier client : **INFRATP**. Le même code produira ensuite la version d’autres bureaux d’études, puis la version SaaS.
 
 ## Modules actuels
 
 | Module | Catégorie | Version | Offre |
 |---|---|---|---|
 | `debits-hydro` — Débits hydrologiques | Hydrologie | 1.2.0 | standard |
-| `dalots-bceom` — Dalots, méthode BCEOM | Hydraulique routière | 1.0.1 | standard |
-| `dalots-fhwa` — Dalots, méthode FHWA (bêta) | Hydraulique routière | 1.0.0 | standard |
+| `dalots-bceom` — Dalots, méthode BCEOM | Hydraulique routière | 1.0.2 | standard |
+| `dalots-fhwa` — Dalots, méthode FHWA (bêta) | Hydraulique routière | 1.1.0 | standard |
 | `chaussees` — Chaussées multicouche | Chaussées | 2.0.0 | pro |
 
 ## Démarrage

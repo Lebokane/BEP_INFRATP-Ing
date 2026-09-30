@@ -2,6 +2,9 @@
   (function(root){
     'use strict';
     const g=9.81, ku=1.811;
+    // Correction de pente en entrée noyée : HDS-5 (2012), éq. A.3 — Ks = −0,5 pour toutes les entrées
+    // sauf les entrées biseautées selon le talus (Ks = +0,7), qui ne sont pas proposées dans ce module.
+    const KS=-0.5;
     function coeff(type,N){
       if(type==='parallel') return {K:.55,M:.64,c:.05,Y:.55,ke:.7,label:'Ailes parallèles, arête vive'};
       if(type==='bevel') return N===1 ? {K:.44,M:.74,c:.04,Y:.48,ke:.26,label:'Ailes 30°, chanfrein 45° — 1 cellule'} : {K:.47,M:.68,c:.04,Y:.62,ke:.32,label:'Ailes 30°, chanfrein 45° — 2 à 4 cellules'};
@@ -20,7 +23,7 @@
       return A*Math.pow(R,2/3)*Math.sqrt(S)/n;
     }
     function transition(c,S){
-      const Y=c.Y+.7*S;
+      const Y=c.Y+KS*S;
       function f(x){ let slope=c.K*c.M*Math.pow(x,c.M-1), x2=slope/(2*c.c); return c.K*(1-c.M)*Math.pow(x,c.M)-Y+c.c*x2*x2; }
       let prev=.0001, fp=f(prev);
       for(let i=1;i<=500;i++){
@@ -45,7 +48,7 @@
       let x=ku*Q/(N*B*D*Math.sqrt(D));
       let h, zone;
       if(x<=t.x1){ h=c.K*Math.pow(x,c.M); zone='Entrée dénoyée'; }
-      else if(x>=t.x2){ h=c.c*x*x+c.Y+.7*p.S; zone='Entrée noyée'; }
+      else if(x>=t.x2){ h=c.c*x*x+c.Y+KS*p.S; zone='Entrée noyée'; }
       else {
         if(t.hermite){
           let dx=t.x2-t.x1, u=(x-t.x1)/dx, delta=.5/dx, m1=Math.min(t.m,3*delta), m2=Math.min(t.m2,3*delta);
@@ -125,5 +128,5 @@
       }
       return groups;
     }
-    root.Hydro={g, coeff, manning, transition, inlet, heads, capacity, analyse, propose, limits};
+    root.Hydro={g, KS, coeff, manning, transition, inlet, heads, capacity, analyse, propose, limits};
   })(typeof module!=='undefined'?module.exports:window);

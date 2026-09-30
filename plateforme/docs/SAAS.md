@@ -27,15 +27,12 @@ Ce qui est déjà en place pour le SaaS :
 Les calculs restent dans le navigateur : pas de coût serveur de calcul, confidentialité des données
 d’étude, et fonctionnement hors connexion conservé. C’est un argument commercial.
 
-## Avant de vendre : points à régler
+## Avant de vendre à d’autres clients
 
-- **Propriété intellectuelle.** Les outils ont été développés avec une adresse `@infratp.com`. Si ce travail a été
-  réalisé dans le cadre d’un contrat de travail ou d’une mission INFRATP, les droits peuvent appartenir à INFRATP.
-  Clarifier par écrit, avec un juriste, avant toute vente à un tiers : cession, licence ou copropriété.
+- **Propriété intellectuelle.** Réglée avec INFRATP, premier client de la plateforme. Conserver l’accord écrit avec les documents du produit.
 - **Données et abaques tiers.** Les méthodes publiées (BCEOM, ORSTOM, FHWA, LBTP, NF P 98-086) se citent. Vérifier
   les conditions de reproduction des tableaux et paramètres repris (catalogue LBTP notamment).
 - **Responsabilité.** Conditions générales qui limitent la responsabilité : outil d’aide au calcul, vérification
   par l’ingénieur. Les avertissements sont déjà présents dans chaque module.
 - **Validation.** Un dossier de validation par module (cas de référence, écarts) rassure les acheteurs. Le module
   Chaussées en a déjà un (160 essais conformes à Boussinesq, KENLAYER et Alizé-LCPC).
-- **Nom commercial.** « Suite Ingénierie » est un nom provisoire, à modifier dans `product.json`.
