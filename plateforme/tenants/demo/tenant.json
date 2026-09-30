@@ -1,0 +1,25 @@
+{
+  "id": "demo",
+  "name": "BET Démo",
+  "fullName": "BET Démo · Bureau d’études",
+  "logo": "logo.svg",
+  "logoAlt": "BET Démo",
+  "slug": "BET-Demo",
+  "eyebrow": "BET DÉMO / OUTILS",
+  "credit": false,
+  "portal": {
+    "title": "Espace calculs",
+    "subtitle": "Client fictif : montre la personnalisation (marque, couleurs, modules sous licence)."
+  },
+  "theme": {
+    "green": "#1d5fa8",
+    "lime": "#4a90d9",
+    "forest": "#16324f",
+    "ink": "#1c2833",
+    "muted": "#5d6d7e",
+    "line": "#d6dee8",
+    "bg": "#f2f5f9",
+    "amber": "#9a6412"
+  },
+  "modules": ["debits-hydro", "dalots-bceom"]
+}

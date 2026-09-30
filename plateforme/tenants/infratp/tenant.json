@@ -1,0 +1,26 @@
+{
+  "id": "infratp",
+  "name": "INFRATP",
+  "fullName": "INFRATP · Ingénieur Conseil",
+  "logo": "logo.jpg",
+  "logoAlt": "INFRATP — Ingénieur Conseil",
+  "slug": "INFRATP",
+  "eyebrow": "INFRATP / OUTILS D’ÉTUDES",
+  "digitizer": "INFRATP",
+  "credit": true,
+  "portal": {
+    "title": "Outils d’études",
+    "subtitle": "Hydrologie, hydraulique routière et chaussées. Calculs sur votre appareil, utilisables hors connexion."
+  },
+  "theme": {
+    "green": "#54800e",
+    "lime": "#89b82d",
+    "forest": "#234734",
+    "ink": "#28362e",
+    "muted": "#65736a",
+    "line": "#dce4db",
+    "bg": "#f3f6f2",
+    "amber": "#946119"
+  },
+  "modules": ["*"]
+}

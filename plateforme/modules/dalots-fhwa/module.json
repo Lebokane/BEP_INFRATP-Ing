@@ -1,0 +1,11 @@
+{
+  "id": "dalots-fhwa",
+  "name": "Dalots · méthode FHWA",
+  "category": "Hydraulique routière",
+  "version": "1.1.0",
+  "status": "beta",
+  "summary": "Présélection de dalots en contrôle entrée / sortie avec niveau aval, niveau amont admissible et revanche sous chaussée.",
+  "methods": ["FHWA HDS-5 / HRT-06-138 — contrôle entrée", "Contrôle sortie approché", "Manning"],
+  "references": ["FHWA HDS-5, 3e éd., 2012", "FHWA-HRT-06-138, 2006", "MnDOT Drainage Manual ch. 5, 2024"],
+  "tier": "standard"
+}

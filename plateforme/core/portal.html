@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{BRAND.name}} · {{PORTAL.title}}</title>
+<style>
+:root{--green:#54800e;--lime:#89b82d;--forest:#234734;--ink:#28362e;--muted:#65736a;--line:#dce4db;--bg:#f3f6f2;--amber:#946119}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Arial,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:19px max(28px,calc((100vw - 1200px)/2));background:#fff;border-bottom:1px solid var(--line)}
+header img{width:185px;height:auto;display:block}
+header .count{font-size:13px;color:var(--muted)}
+main{max-width:1200px;margin:auto;padding:32px 28px}
+.eyebrow{font-size:11px;letter-spacing:1.7px;color:var(--green);font-weight:700}
+h1{font-size:34px;letter-spacing:-.8px;margin:6px 0;font-weight:600}
+.intro p{color:var(--muted);margin:4px 0 0;max-width:720px}
+section{margin-top:34px}
+h2{font-size:13px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px;display:flex;flex-direction:column;min-width:0}
+.card:hover{border-color:var(--lime);box-shadow:inset 0 3px var(--lime)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.badge{font-size:11px;padding:2px 7px;border-radius:3px;background:#fff2dc;color:var(--amber)}
+h3{font-size:19px;margin:0 0 6px;letter-spacing:-.3px}
+.card p{font-size:14px;color:var(--muted);margin:0 0 12px}
+.methods{list-style:none;padding:0;margin:0 0 16px;display:flex;flex-wrap:wrap;gap:6px}
+.methods li{font-size:11px;border:1px solid var(--line);border-radius:3px;padding:2px 7px;color:var(--ink);background:var(--bg)}
+.card-foot{margin-top:auto;display:flex;align-items:center;gap:14px;border-top:1px solid var(--line);padding-top:12px}
+.open{background:var(--forest);color:#fff;text-decoration:none;padding:8px 14px;border-radius:4px;font-size:14px}
+.dl{color:var(--green);font-size:13px;text-decoration:none}
+.ver{margin-left:auto;font-size:12px;color:var(--muted)}
+.empty{color:var(--muted)}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+footer a{color:var(--green)}
+@media(max-width:700px){header{padding:14px 16px}header img{width:130px}main{padding:22px 16px}h1{font-size:27px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <img src="{{BRAND.logo}}" alt="{{BRAND.logoAlt}}">
+  <span class="count">{{PORTAL.count}} module(s)</span>
+</header>
+<main>
+  <div class="intro">
+    <span class="eyebrow">{{BRAND.eyebrow}}</span>
+    <h1>{{PORTAL.title}}</h1>
+    <p>{{PORTAL.subtitle}}</p>
+  </div>
+  {{PORTAL.sections}}
+  <footer>
+    <span>{{BRAND.fullName}}</span>
+    {{CREDIT_HTML}}
+    <span>{{PRODUCT.name}} · v{{PRODUCT.version}}</span>
+  </footer>
+</main>
+</body>
+</html>

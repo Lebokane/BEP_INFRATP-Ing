@@ -1,0 +1,15 @@
+{
+  "name": "kalc-systems",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plateforme modulaire d’outils d’ingénierie, personnalisable par client (marque blanche).",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test \"tests/*.test.mjs\" \"modules/*/*.test.mjs\"",
+    "new-module": "node scripts/new-module.mjs",
+    "serve": "node scripts/serve.mjs",
+    "preview": "node scripts/preview.mjs --tenant",
+    "dev": "node scripts/build.mjs && node scripts/serve.mjs"
+  }
+}

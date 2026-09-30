@@ -1,0 +1,1127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#234734">
+<title>{{BRAND.name}} · Chaussées Multicouche</title>
+<meta name="description" content="Dimensionnement des chaussées neuves : calcul multicouche de Burmister, référentiel LBTP 2024 (Côte d’Ivoire) et méthode NF P 98-086.">
+<style>
+:root{--green:#54800e;--lime:#89b82d;--forest:#234734;--ink:#28362e;--muted:#65736a;--line:#dce4db;--bg:#f3f6f2;--amber:#946119;--bad:#a7402a;
+  --l-bitume:#4a4f4c;--l-mtlh:#a8977a;--l-nt:#d2b37c;--l-sol:#b98560;color-scheme:light}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font:16px/1.5 Arial,Helvetica,sans-serif}
+button,input,select{font:inherit}
+button,summary{cursor:pointer}
+a{color:var(--green)}
+header.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:16px max(16px,calc((100vw - 1470px)/2));background:#fff;border-bottom:1px solid var(--line);gap:14px 18px}
+.identity{display:flex;align-items:center;gap:24px;min-width:0}
+.identity img{width:190px;max-width:42vw;height:auto;display:block}
+.appname{border-left:1px solid var(--line);padding-left:24px;font-size:21px;letter-spacing:1.5px;white-space:nowrap}
+.appname b{color:var(--green)}
+.appname span{display:block;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin-top:4px}
+.method-chip{font-size:11px;letter-spacing:1px;border:1px solid #d2ddca;padding:10px 14px;border-radius:5px;white-space:nowrap;color:var(--forest);background:#fff}
+.method-chip span{display:block;letter-spacing:0;margin-top:4px;font-size:12px;color:var(--muted)}
+main{max-width:1470px;padding-block:24px 28px;padding-inline:max(16px,1.5vw);margin:auto}
+.intro{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:4px 0 24px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:1.7px;color:var(--green);font-weight:700}
+h1{font-size:32px;letter-spacing:-.8px;margin:5px 0;font-weight:600;text-wrap:balance}
+.intro p{margin:6px 0;color:var(--muted);font-size:15px;max-width:70ch}
+.workspace{display:grid;grid-template-columns:400px minmax(0,1fr);gap:24px;align-items:start}
+aside{background:#fff;border:1px solid var(--line);border-radius:7px}
+form{padding:20px}
+h2{font-size:19px;letter-spacing:-.3px;margin:0}
+h3{font-size:15px;margin:16px 0 10px}
+.form-title{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.form-title h2{font-size:17px}
+.link{border:0;padding:0;background:none;color:var(--green);font-size:13px}
+.group{border-top:1px solid var(--line);padding-top:4px;margin-top:20px}
+.group>h3{font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
+label{display:block;margin:12px 0 5px;font-size:14px}
+label span{float:right;font-size:12px;color:var(--muted)}
+input[type=number],input[type=text],select{width:100%;height:40px;border:1px solid #cdd8c8;background:#fbfcfa;padding:8px 9px;border-radius:4px;color:var(--ink);min-width:0;font-variant-numeric:tabular-nums}
+input:focus,select:focus{outline:2px solid #7ca45a;border-color:transparent;background:#fff}
+button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.two label,.three label{margin-top:10px}
+.hint{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0}
+.layer{border:1px solid var(--line);border-left:5px solid var(--sw,#999);border-radius:5px;padding:4px 12px 12px;margin-top:12px;background:#fcfdfb}
+.layer-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}
+.layer-head b{font-size:13px;letter-spacing:.8px;color:var(--forest)}
+.layer-head .link{font-size:12px}
+.addrow{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px}
+.small-btn{border:1px solid #b4c5ad;background:#fff;color:var(--forest);padding:7px 12px;border-radius:4px;font-size:13px}
+.crit{margin-top:10px;border-top:1px dashed var(--line);padding-top:4px}
+.crit summary{font-size:12px;color:var(--green);font-weight:600;margin-top:6px}
+.primary{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--forest);color:#fff;border:0;border-radius:4px;padding:13px 15px;margin-top:22px;font-size:15px}
+.primary:hover{background:#355d43}
+.primary span{font-size:23px}
+.local{font-size:11px;text-align:center;color:var(--muted);margin:12px 0 0}
+#error{background:#fff0e9;color:#a54b27;padding:10px;font-size:13px;margin-top:14px}
+.right{min-width:0}
+.right nav{display:flex;gap:9px;border-bottom:1px solid #cbd8c6;margin-bottom:17px;overflow-x:auto}
+.right nav button{border:0;border-bottom:3px solid transparent;background:none;padding:13px 18px;color:var(--muted);display:flex;gap:10px;font-size:13px;white-space:nowrap}
+.right nav button span{font-size:16px}
+.right nav button.active{border-bottom-color:var(--green);color:var(--green);font-weight:600}
+.scope{border:1px solid #dce5d7;border-left:3px solid var(--lime);background:#eef3e9;padding:10px 14px;font-size:12px;color:#506547;border-radius:3px;margin-bottom:20px}
+.reshead{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px;flex-wrap:wrap}
+.reshead p{font-size:13px;color:var(--muted);margin:4px 0 0}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);background:var(--forest);color:#fff;border-radius:7px;padding:22px 0;margin-bottom:20px}
+.strip>div{padding:0 22px;border-right:1px solid #597560;min-width:0}
+.strip>div:last-child{border:0}
+.strip small{font-size:11px;letter-spacing:.6px;color:#c8d9bd;display:block;margin-bottom:8px}
+.strip strong{font-size:28px;font-weight:500;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.strip em{font-size:13px;font-style:normal;color:#c8d9bd;margin-left:5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:7px;padding:19px;min-width:0;margin-bottom:18px}
+.card h3{margin:0 0 12px;font-size:16px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+td,th{padding:8px 7px;border-bottom:1px solid #e8eee3;text-align:right;font-weight:400;white-space:nowrap}
+th{font-size:11.5px;color:var(--muted);background:#f8faf5;letter-spacing:.3px}
+th:first-child,td:first-child{text-align:left}
+td .pos{color:var(--muted);font-size:11px;margin-left:4px}
+.sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+.badge{font-size:11px;padding:3px 8px;border-radius:3px;background:#eff5e6;color:#4b701e;white-space:nowrap;font-weight:700}
+.badge.warn{background:#fff2dc;color:#865917}
+.badge.bad{background:#fcece8;color:var(--bad)}
+.bar{height:8px;border-radius:4px;background:#eef2ea;position:relative;min-width:110px;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:4px}
+.note{background:#fff7e8;border-left:3px solid #c99943;padding:12px 15px;margin-top:14px;font-size:13px;line-height:1.65;color:#745a2f}
+.note.neutral{background:#f0f5ec;border-color:#95b56d;color:#4e663f}
+.section-svg{width:100%;height:auto;display:block}
+.actions{display:flex;gap:14px}
+.method{border:1px solid var(--line);border-radius:7px;background:#fff;margin-top:28px}
+.method>summary{display:flex;justify-content:space-between;padding:20px 23px;list-style:none;font-size:15px;font-weight:600}
+.methodbody{padding:0 23px 23px;font-size:14px;line-height:1.75;max-width:110ch}
+.methodbody h3{margin:18px 0 6px;font-size:15px}
+.formula{background:#f6f8f3;border-left:3px solid var(--lime);padding:9px 13px;margin:8px 0;font-family:Georgia,serif;font-size:14px;overflow-x:auto}
+.methodbody ol{padding-left:20px}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:24px;color:var(--muted);font-size:12px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--forest);color:white;padding:12px 20px;border-radius:5px;font-size:14px;z-index:30}
+.stale-msg{background:#fff1d8;color:#886229;padding:12px 15px;border:1px solid #e8d6b2;border-radius:4px;margin-bottom:15px;font-size:14px}
+.stale{opacity:.45}
+.val-sum{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+[hidden]{display:none!important}
+@media(max-width:1100px){.workspace{grid-template-columns:360px minmax(0,1fr);gap:18px}.strip{grid-template-columns:repeat(2,1fr);row-gap:18px}.strip>div:nth-child(2){border:0}.method-chip{display:none}}
+@media(max-width:800px){.workspace{grid-template-columns:1fr}.identity img{width:140px}.appname{font-size:16px;padding-left:14px;letter-spacing:.5px}h1{font-size:26px}.strip strong{font-size:23px}}
+@media(max-width:420px){.appname{display:none}.three{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid #cdd8c8;border-radius:5px;overflow:hidden;margin-top:12px}
+.seg button{border:0;background:#fbfcfa;padding:10px 8px;font-size:13px;color:var(--muted);line-height:1.3}
+.seg button b{display:block;font-size:14px;color:var(--ink)}
+.seg button.on{background:var(--forest);color:#d9e7cf}
+.seg button.on b{color:#fff}
+.seg button+button{border-left:1px solid #cdd8c8}
+.out{background:#f3f7ef;border:1px solid #dfe8d8;border-radius:4px;padding:9px 11px;margin-top:12px;font-size:13px;line-height:1.6}
+.out b{color:var(--forest)}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:3px;background:var(--forest);color:#fff;letter-spacing:.3px;margin-right:4px}
+.chip.lime{background:#e7f0d6;color:#40601a}
+.chip.warn{background:#fff2dc;color:#865917}
+.chip.bad{background:#fcece8;color:var(--bad)}
+.check{display:flex;gap:8px;align-items:flex-start;margin:12px 0 0;font-size:13.5px}
+.check input{margin-top:3px;accent-color:var(--green)}
+.fiche{border:1px solid var(--line);border-radius:5px;padding:10px 12px;margin-top:10px;font-size:13px;line-height:1.6;background:#fcfdfb}
+.fiche b{color:var(--forest)}
+.secondary{width:100%;border:1px solid var(--forest);background:#fff;color:var(--forest);border-radius:4px;padding:10px 12px;margin-top:12px;font-size:14px;font-weight:600}
+.secondary:hover{background:#eef4ea}
+.warns{list-style:none;padding:0;margin:12px 0 0}
+.warns li{padding:8px 12px;border-left:3px solid #c99943;background:#fff7e8;color:#745a2f;font-size:13px;margin-top:6px;border-radius:0 3px 3px 0}
+.warns li.bad{border-color:var(--bad);background:#fcece8;color:#8a3522}
+.warns li.ok{border-color:#95b56d;background:#f0f5ec;color:#4e663f}
+.ctx{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin:0 0 12px}
+.ctx b{color:var(--ink)}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ref-grid .card{margin:0}
+.src{font-size:11px;color:var(--muted);font-style:italic}
+td.l{text-align:left;white-space:normal}
+.sub{font-size:11.5px;color:var(--muted);margin-top:4px}
+.lbtp-only,.libre-only{}
+body.mode-libre .lbtp-only{display:none!important}
+body.mode-lbtp .libre-only{display:none!important}
+@media(max-width:1100px){.ref-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="identity">
+    <img src="{{BRAND.logo}}" alt="{{BRAND.logoAlt}}">
+    <div class="appname">CHAUSSÉES <b>MULTICOUCHE</b><span>DIMENSIONNEMENT DES CHAUSSÉES NEUVES</span></div>
+  </div>
+  <div class="method-chip" id="chip-ref">LBTP 2024 · CÔTE D’IVOIRE<span>Essieu 130 kN · θéq 32 °C · 20 Hz</span></div>
+</header>
+
+<main>
+  <div class="intro">
+    <div>
+      <span class="eyebrow">{{BRAND.eyebrow}}</span>
+      <h1>Modéliser. Calculer. Vérifier.</h1>
+      <p>Sollicitations d’une structure multicouche élastique sous l’essieu de référence, vérification des critères du manuel LBTP 2024 ou de la norme NF P 98-086, recherche de l’épaisseur minimale.</p>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <aside>
+      <form id="form" novalidate>
+        <div class="form-title">
+          <h2>Données de calcul</h2>
+          <button type="button" id="reset" class="link">Réinitialiser</button>
+        </div>
+
+        <div class="group">
+          <h3>00 / Référentiel</h3>
+          <div class="seg" role="group" aria-label="Référentiel de dimensionnement">
+            <button type="button" data-ref="lbtp" class="on" aria-pressed="true"><b>LBTP 2024</b>Côte d’Ivoire</button>
+            <button type="button" data-ref="libre" aria-pressed="false"><b>Calcul libre</b>NF P 98-086</button>
+          </div>
+          <p class="hint lbtp-only">Manuel de conception et de dimensionnement des chaussées neuves des routes interurbaines (LBTP, avril 2024) : risque, ks, Sh, kθ, kc et critère εz appliqués automatiquement.</p>
+          <p class="hint libre-only">Tous les coefficients sont saisis couche par couche (méthode rationnelle NF P 98-086).</p>
+        </div>
+
+        <div class="group lbtp-only">
+          <h3>01 / Projet</h3>
+          <label for="p-region">Région géotechnique</label>
+          <select id="p-region"></select>
+          <p class="hint" id="region-out"></p>
+          <div class="two">
+            <div><label for="p-road">Type de route</label>
+              <select id="p-road"><option value="rn">Route nationale</option><option value="auto">Autoroute</option><option value="uemoa">Route communautaire UEMOA</option><option value="autre">Autre route</option></select></div>
+            <div><label for="p-tmja">TMJA PL <span>PL/j/sens</span></label><input id="p-tmja" type="number" step="any" value="150"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h3><span class="lbtp-only">02</span><span class="libre-only">01</span> / Trafic et risque</h3>
+          <div class="two">
+            <div><label for="t-mja">MJA <span>PL/j/voie</span></label><input id="t-mja" type="number" step="any" value="150"></div>
+            <div><label for="t-n">Durée n <span>ans</span></label><input id="t-n" type="number" step="1" value="20"></div>
+            <div><label for="t-tau">Taux τ <span>%</span></label><input id="t-tau" type="number" step="any" value="2"></div>
+            <div class="libre-only"><label for="t-mode">Accroissement</label><select id="t-mode"><option value="arith">Arithmétique</option><option value="geom">Géométrique</option></select></div>
+            <div><label for="t-cam">CAM</label><input id="t-cam" type="number" step="any" value="0.8"></div>
+            <div class="libre-only"><label for="t-risk">Risque <span>%</span></label><input id="t-risk" type="number" step="any" value="10"></div>
+          </div>
+          <label for="t-ne">NE imposé <span>optionnel</span></label>
+          <input id="t-ne" type="number" step="any" placeholder="calculé à partir du trafic">
+          <label class="check lbtp-only"><input type="checkbox" id="t-upper" checked> Dimensionner à la borne supérieure de la classe TC</label>
+          <div class="out" id="traffic-out"></div>
+        </div>
+
+        <div class="group lbtp-only">
+          <h3>03 / Catalogue ivoirien</h3>
+          <label for="c-fiche">Fiche de structure</label>
+          <select id="c-fiche"></select>
+          <label class="check"><input type="checkbox" id="c-all"> Afficher aussi les fiches hors domaine d’emploi</label>
+          <div class="two">
+            <div><label for="c-roul">Couche de roulement</label>
+              <select id="c-roul"><option value="BBSG5">BBSG 5 cm</option><option value="BBM4">BBM 4 cm</option><option value="BBM3">BBM 3 cm</option><option value="ES">Enduit superficiel</option></select></div>
+            <div><label for="c-epf">E plateforme <span>MPa</span></label><input id="c-epf" type="number" step="any" value="80"></div>
+          </div>
+          <div id="fiche-out"></div>
+          <button type="button" class="secondary" id="c-apply">Construire la structure de la fiche</button>
+          <p class="hint">Les épaisseurs proposées sont des valeurs de départ : reportez celles de la fiche ou lancez l’optimisation (groupe 05).</p>
+        </div>
+
+        <div class="group">
+          <h3><span class="lbtp-only">04</span><span class="libre-only">02</span> / Structure</h3>
+          <div id="layers"></div>
+          <div class="addrow">
+            <button type="button" class="small-btn" id="add-layer">+ Ajouter une couche</button>
+            <span class="hint" style="margin:0">Dernière couche : plateforme semi-infinie.</span>
+          </div>
+          <details class="crit" id="ppf-tool">
+            <summary>Déterminer la portance de la plateforme (arase + couche de forme)</summary>
+            <div class="two">
+              <div><label for="f-cbr">CBR de l’arase</label><input id="f-cbr" type="number" step="any" value="8"></div>
+              <div><label for="f-ear">E arase <span>MPa</span></label><input id="f-ear" type="number" step="any" value="40"></div>
+              <div><label for="f-h">Couche de forme <span>cm</span></label><input id="f-h" type="number" step="any" value="40"></div>
+              <div><label for="f-ecf">E couche de forme <span>MPa</span></label><input id="f-ecf" type="number" step="any" value="150"></div>
+            </div>
+            <div class="out" id="ppf-out"></div>
+            <button type="button" class="secondary" id="f-apply">Reporter ce module sur la plateforme</button>
+            <p class="hint">Module équivalent obtenu par le solveur : flèche au centre d’une charge souple de 0,30 m de rayon sur le bicouche, comparée à celle d’un massif homogène. Estimation mécanique indicative, à rapprocher des essais de plaque et des tableaux du manuel.</p>
+          </details>
+        </div>
+
+        <div class="group">
+          <h3><span class="lbtp-only">05</span><span class="libre-only">03</span> / Chargement et dimensionnement</h3>
+          <div class="two">
+            <div><label for="load-type">Type de charge</label>
+              <select id="load-type"><option value="dual">Jumelage (demi-essieu)</option><option value="single">Roue simple</option></select></div>
+            <div><label for="load-q">q <span>MPa</span></label><input id="load-q" type="number" step="any" value="0.662"></div>
+            <div><label for="load-a">a <span>m</span></label><input id="load-a" type="number" step="any" value="0.125"></div>
+            <div id="dwrap"><label for="load-d">d <span>m</span></label><input id="load-d" type="number" step="any" value="0.375"></div>
+          </div>
+          <p class="hint">Essieu de référence 130 kN : q = 0,662 MPa, a = 0,125 m, d = 0,375 m.</p>
+          <label for="o-layer">Optimiser l’épaisseur de</label>
+          <select id="o-layer"></select>
+          <button type="button" class="secondary" id="o-run">Rechercher l’épaisseur minimale</button>
+          <p class="hint" id="o-out"></p>
+        </div>
+
+        <p id="error" role="alert" hidden></p>
+        <button class="primary" id="run" type="submit">Calculer la structure <span>↗</span></button>
+        <p class="local">Fonctionne entièrement sur votre appareil.</p>
+      </form>
+    </aside>
+
+    <section class="right">
+      <nav aria-label="Vue">
+        <button type="button" data-view="solls" class="active">01 <span>Sollicitations</span></button>
+        <button type="button" data-view="verif">02 <span>Vérification</span></button>
+        <button type="button" data-view="valid">03 <span>Validation</span></button>
+        <button type="button" data-view="ref">04 <span>Référentiel LBTP</span></button>
+      </nav>
+      <div class="scope" id="scope"></div>
+      <div id="results" aria-live="polite"></div>
+      <div id="validation" hidden></div>
+      <div id="refview" hidden></div>
+    </section>
+  </div>
+
+  <details id="method" class="method">
+    <summary>Méthode de calcul, références et limites <span>+</span></summary>
+    <div class="methodbody">
+      <h3>Modèle mécanique</h3>
+      <p>Le solveur résout le problème de Burmister : couches élastiques linéaires, homogènes et isotropes, d’extension latérale infinie, reposant sur un massif semi-infini. La solution est exprimée par transformée de Hankel ; pour chaque valeur du paramètre d’intégration, les coefficients des couches sont obtenus par résolution directe des conditions aux limites : charge en surface, continuité des contraintes et des déplacements aux interfaces collées, cisaillement nul de part et d’autre des interfaces glissantes. Les intégrales sont évaluées par quadrature de Gauss-Legendre entre les zéros des fonctions de Bessel. Le jumelage est obtenu par superposition de deux charges circulaires ; une interface semi-collée est la moyenne des calculs collé et glissé, comme dans Alizé-LCPC.</p>
+      <h3>Référentiel LBTP 2024 (Côte d’Ivoire)</h3>
+      <div class="formula">Hypothèses : θéq = 32 °C, f = 20 Hz ; ν = 0,45 (bitumineux), 0,35 (autres) ; essieu 130 kN ; durée 20 ans (autoroute, route UEMOA, RN à plus de 200 PL/j/sens), 15 ans sinon.</div>
+      <div class="formula">NE = 365 · MJA · C · CAM ; C = n·[1 + (n−1)·τ/2] ; dimensionnement à la borne supérieure de la classe TC1⁻ … TC6⁺.</div>
+      <div class="formula">Bitumineux : εt,adm = ε6 · (NE/10⁶)^b · kθ · kr · ks · kc ; kr = 10^(−u·b·δ) ; δ = √(SN² + (c·Sh/b)²) ; c = 2 m⁻¹</div>
+      <div class="formula">Sh = 0,01 m (h ≤ 0,10 m) ; 0,01 + 0,3·(h − 0,10) (0,10 &lt; h ≤ 0,15 m) ; 0,025 m (h &gt; 0,15 m)</div>
+      <div class="formula">ks = 1/1,2 (E &lt; 50) ; 1/1,1 (50 ≤ E &lt; 80) ; 1/1,065 (80 ≤ E &lt; 120) ; 1 (E ≥ 120 MPa) ; risque r : 30 / 25 / 15 / 10 / 5 / 5 % de TC1 à TC6</div>
+      <div class="formula">Plateforme : εz ≤ 0,020·NE^(−0,222) (assise non traitée) ; 1,20·εz ≤ 0,020·NE^(−0,222) (assise améliorée au ciment, ka = 1,20) ; εz ≤ A·NE^(−0,222), A = 0,016 / 0,014 / 0,013 (assise bitumineuse, TC1-2 / TC3-4 / TC5-6)</div>
+      <div class="formula">Non traités et améliorés Q1 : découpage en sous-couches de 25 cm au plus, E = min(k · E sous-jacent ; Emax)</div>
+      <h3>Méthode rationnelle NF P 98-086 (calcul libre)</h3>
+      <div class="formula">Enrobés : εt,adm = ε6(10 °C, 25 Hz) · (NE/10⁶)^b · √(E(10 °C)/E(θéq)) · kr · ks · kc</div>
+      <div class="formula">Matériaux traités aux liants hydrauliques : σt,adm = σ6 · (NE/10⁶)^b · kr · kd · ks · kc</div>
+      <div class="formula">Sols et matériaux non traités : εz,adm = A · NE^(−0,222)</div>
+      <h3>Correspondance entre les deux modes</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Donnée</th><th style="text-align:left">LBTP 2024</th><th style="text-align:left">Calcul libre</th></tr></thead>
+        <tbody>
+          <tr><td>Trafic</td><td class="l">NE arithmétique, classe TC, borne supérieure</td><td class="l">NE arithmétique ou géométrique, ou imposé</td></tr>
+          <tr><td>Risque</td><td class="l">Fixé par la classe TC</td><td class="l">Saisi</td></tr>
+          <tr><td>Durée</td><td class="l">15 ou 20 ans selon la route</td><td class="l">Saisie</td></tr>
+          <tr><td>Matériaux</td><td class="l">Bibliothèque ivoirienne (GNT, GLn, SAn, GLa, SAa, GB, EME, BB)</td><td class="l">Nature et paramètres libres</td></tr>
+          <tr><td>kθ, ks, Sh</td><td class="l">kθ par matériau, ks par la plateforme, Sh par l’épaisseur</td><td class="l">√(E10/Eθ), saisis</td></tr>
+          <tr><td>Non traités</td><td class="l">Sous-couches, k et Emax</td><td class="l">Module saisi</td></tr>
+          <tr><td>Critère εz</td><td class="l">A selon la famille d’assise, ka = 1,20 si améliorée</td><td class="l">A saisi</td></tr>
+          <tr><td>Traités aux liants hydrauliques</td><td class="l">Améliorés : pas de critère de fatigue, ka sur εz</td><td class="l">σt,adm (fatigue)</td></tr>
+        </tbody></table></div>
+      <h3>Références</h3>
+      <ol>
+        <li>LBTP (2024). <i>Manuel pour la conception et le dimensionnement des chaussées neuves des routes interurbaines</i> — Fascicule 1 (catalogue F1 à F17), Fascicule 2 (hypothèses et données de calcul), Fascicule 3 (notice d’utilisation).</li>
+        <li>Burmister D.M. (1945). The general theory of stresses and displacements in layered systems. <i>Journal of Applied Physics</i>, 16.</li>
+        <li>Huang Y.H. (2004). <i>Pavement Analysis and Design</i>, 2e éd. — chapitre 2 et programme KENLAYER.</li>
+        <li>Timoshenko S., Goodier J.N. (1970). <i>Theory of Elasticity</i> — solution de Boussinesq.</li>
+        <li>AFNOR NF P 98-086 (2019). Dimensionnement structurel des chaussées routières.</li>
+        <li>LCPC-SETRA (1994). <i>Conception et dimensionnement des structures de chaussée</i>.</li>
+        <li>LCPC / itech. <i>Manuel d’utilisation Alizé-LCPC Routes</i>, v1.2 et v1.5 — exemple de calcul direct (figure 7.4).</li>
+        <li>Shell Bitumen (1998). <i>BISAR 3.0 User Manual</i> — exemple « Block Report ».</li>
+        <li>Nakhaei M. et al., PyMastic (Apache 2.0) — formulation des conditions aux limites.</li>
+      </ol>
+      <div class="note">Les paramètres LBTP 2024 sont repris du cahier des charges de l’application et restent modifiables couche par couche ; ils doivent être confrontés au manuel avant toute note de calcul. L’outil ne dispense pas de la vérification de l’ingénieur.</div>
+    </div>
+  </details>
+
+  <footer>
+    <span>{{BRAND.fullName}}</span>
+    {{CREDIT_HTML}}
+    <span>Chaussées Multicouche · Version 2.0</span>
+  </footer>
+</main>
+<div id="toast" role="status" hidden></div>
+
+<script src="engine.js"></script>
+<script>
+(function(){
+'use strict';
+const $ = id => document.getElementById(id);
+const F = (v, d=2) => (v === null || v === undefined || !Number.isFinite(v)) ? '—' : v.toLocaleString('fr-FR', {minimumFractionDigits:d, maximumFractionDigits:d});
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(t){ const el=$('toast'); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,3500); }
+
+/* ======================================================================
+   RÉFÉRENTIEL LBTP 2024 — données du manuel (Fasc. 1, 2, 3)
+   Valeurs reprises du cahier des charges ; toutes restent modifiables.
+   ====================================================================== */
+
+// Classes de trafic cumulé (Fasc. 2, §8.3) — bornes en essieux de 130 kN
+const TC = [
+  ['TC1⁻',0.07e6,0.2e6],['TC1⁺',0.2e6,0.5e6],['TC2⁻',0.5e6,0.9e6],['TC2⁺',0.9e6,1.5e6],
+  ['TC3⁻',1.5e6,2.5e6],['TC3⁺',2.5e6,4.0e6],['TC4⁻',4.0e6,6.5e6],['TC4⁺',6.5e6,10e6],
+  ['TC5⁻',10e6,16e6],['TC5⁺',16e6,25e6],['TC6⁻',25e6,35e6],['TC6⁺',35e6,50e6]];
+// Risque de calcul par classe TC (Fasc. 2, tableau 12)
+const RISK = {1:0.30, 2:0.25, 3:0.15, 4:0.10, 5:0.05, 6:0.05};
+// Classes de portance de la plateforme (Fasc. 1, §2.3 ; Fasc. 3, §4)
+const PPF = [['PPF1',20,50],['PPF2',50,80],['PPF3',80,120],['PPF4',120,200],['PPF5',200,Infinity]];
+// Classes d’arase (Fasc. 3, §4.1)
+const AR = [['AR0',0,5,'E < 20'],['AR1',5,10,'20 à 50'],['AR2',10,15,'50 à 80'],['AR3',15,25,'80 à 120'],['AR4',25,40,'120 à 200'],['AR5',40,Infinity,'≥ 200']];
+// Régions géotechniques (Fasc. 1, §2.1)
+const REGIONS = {
+  R1:{nom:'R1 — Littoral', res:'sables'},
+  R2:{nom:'R2 — Sud-est', res:'graveleux G2, G3 ; schistes'},
+  R3:{nom:'R3 — Sud-ouest', res:'graveleux G2, G3 ; granite'},
+  R4:{nom:'R4 — Centre-sud', res:'G2, G3 (sud), G1, G2 (nord) ; granite'},
+  R5:{nom:'R5 — Centre-nord', res:'G1, G2 ; sable ; granite'},
+  R6:{nom:'R6 — Nord-est', res:'G1, G2 ; sable ; granite'},
+  R7:{nom:'R7 — Nord-ouest', res:'granite ; graveleux peu plastiques'},
+};
+const ALLR = ['R1','R2','R3','R4','R5','R6','R7'], R27 = ALLR.slice(1);
+const tci = n => TC.findIndex(t => t[0] === n);
+// Catalogue des 17 fiches (Fasc. 1) : assise = [couche de base, couche de fondation]
+const FICHES = [
+  {id:'F1', fam:'Souple — assise non traitée', base:'GNT', fond:'GNT', tc:['TC1⁻','TC2⁺'], reg:ALLR, ppf:[2,5]},
+  {id:'F2', fam:'Souple — assise non traitée', base:'GNT', fond:'GLa1', tc:['TC1⁻','TC2⁺'], reg:R27, ppf:[2,5]},
+  {id:'F3', fam:'Souple — assise non traitée', base:'GNT', fond:'SAa1', tc:['TC1⁻','TC2⁺'], reg:['R1'], ppf:[2,5]},
+  {id:'F4', fam:'Assise améliorée au ciment', base:'GLa2', fond:'GLn', tc:['TC1⁺','TC3⁺'], reg:R27, ppf:[2,5]},
+  {id:'F5', fam:'Assise améliorée au ciment', base:'GLa2', fond:'GLa1', tc:['TC1⁺','TC3⁻'], reg:R27, ppf:[2,5]},
+  {id:'F6', fam:'Assise améliorée au ciment', base:'SAa2', fond:'SAn', tc:['TC1⁺','TC3⁻'], reg:['R1'], ppf:[2,5]},
+  {id:'F7', fam:'Assise améliorée au ciment', base:'SAa2', fond:'SAa1', tc:['TC1⁺','TC3⁺'], reg:['R1'], ppf:[2,5]},
+  {id:'F8', fam:'Assise bitumineuse', base:'GB3', fond:'GNT', tc:['TC1⁺','TC3⁺'], reg:ALLR, ppf:[2,5]},
+  {id:'F9', fam:'Assise bitumineuse', base:'GB3', fond:'GLa1', tc:['TC1⁺','TC3⁺'], reg:R27, ppf:[2,5]},
+  {id:'F10', fam:'Assise bitumineuse', base:'GB3', fond:'SAa1', tc:['TC1⁺','TC3⁺'], reg:['R1'], ppf:[2,5]},
+  {id:'F11', fam:'Assise bitumineuse', base:'GB4', fond:'GNT', tc:['TC2⁺','TC3⁺'], reg:ALLR, ppf:[2,5]},
+  {id:'F12', fam:'Assise bitumineuse', base:'GB4', fond:'GLa1', tc:['TC2⁺','TC3⁺'], reg:R27, ppf:[2,5]},
+  {id:'F13', fam:'Assise bitumineuse', base:'GB4', fond:'SAa1', tc:['TC2⁺','TC3⁺'], reg:['R1'], ppf:[2,5]},
+  {id:'F14', fam:'Bitumineuse épaisse', base:'GB3', fond:'GB3', tc:['TC2⁻','TC6⁺'], reg:ALLR, ppf:[3,5]},
+  {id:'F15', fam:'Bitumineuse épaisse', base:'GB4', fond:'GB4', tc:['TC3⁻','TC6⁺'], reg:ALLR, ppf:[3,5]},
+  {id:'F16', fam:'Bitumineuse épaisse', base:'EME2', fond:'GB3', tc:['TC3⁻','TC6⁺'], reg:ALLR, ppf:[3,5]},
+  {id:'F17', fam:'Bitumineuse épaisse', base:'EME2', fond:'EME2', tc:['TC3⁻','TC6⁺'], reg:ALLR, ppf:[3,5]},
+];
+// Bibliothèque des matériaux ivoiriens (Fasc. 2) — E à 32 °C / 20 Hz pour les bitumineux
+// crit : paramètres de fatigue (ε6 en µdéf, b, SN, kθ, kc) ; nl : loi non linéaire (k, Emax)
+const MAT = {
+  BBSG:{label:'BBSG 3 — béton bitumineux semi-grenu', type:'bitume', E:2000, nu:0.45, crit:{eps6:100, b:-0.20, SN:0.25, kth:1.897, kc:1.1}, h:[5,8], note:'kθ = √(7 200/2 000) ; paramètres de fatigue NF P 98-086, à confirmer'},
+  BBM:{label:'BBM — béton bitumineux mince', type:'bitume', E:1500, nu:0.45, crit:{eps6:100, b:-0.20, SN:0.25, kth:1.897, kc:1.1}, h:[3,4], active:false, note:'couche mince de roulement : fatigue non vérifiée par défaut'},
+  GB3:{label:'GB3 — grave-bitume classe 3', type:'bitume', E:3000, nu:0.45, crit:{eps6:90, b:-0.30, SN:0.30, kth:2.16, kc:1.3}, h:[8,16]},
+  GB4:{label:'GB4 — grave-bitume classe 4', type:'bitume', E:4000, nu:0.45, crit:{eps6:100, b:-0.30, SN:0.30, kth:2.03, kc:1.3}, h:[8,16]},
+  EME2:{label:'EME2 — enrobé à module élevé', type:'bitume', E:6800, nu:0.45, crit:{eps6:130, b:-0.25, SN:0.25, kth:1.67, kc:1.0}, h:[7,15]},
+  GLa2:{label:'GLa2 — graveleux latéritique amélioré Q2', type:'ameliore', E:1000, nu:0.35},
+  SAa2:{label:'SAa2 — sable argileux amélioré Q2', type:'ameliore', E:1000, nu:0.35},
+  GLa1:{label:'GLa1 — graveleux latéritique amélioré Q1', type:'ameliore', E:450, nu:0.35, nl:{k:2.5, Emax:450}},
+  SAa1:{label:'SAa1 — sable argileux amélioré Q1', type:'ameliore', E:450, nu:0.35, nl:{k:2.5, Emax:450}},
+  GNT:{label:'GNT — grave non traitée 0/20, 0/31,5', type:'nt', E:400, nu:0.35, nl:{k:2.5, Emax:400}},
+  GLn:{label:'GLn — graveleux latéritique naturel', type:'nt', E:300, nu:0.35, nl:{k:2, Emax:300}},
+  SAn:{label:'SAn — sable argileux naturel', type:'nt', E:300, nu:0.35, nl:{k:2, Emax:300}},
+  PF:{label:'Plateforme (PPF)', type:'sol', E:80, nu:0.35},
+  X:{label:'Autre matériau (saisie libre)', type:'nt', E:200, nu:0.35},
+};
+const START_H = {GNT:20, GLn:20, SAn:20, GLa1:20, SAa1:20, GLa2:20, SAa2:20, GB3:12, GB4:12, EME2:10};
+
+function tcClass(NE){ const k = TC.findIndex(t => NE <= t[2]); return k < 0 ? {k:TC.length-1, name:'> TC6⁺', out:'haut'} : (NE < TC[0][1] ? {k:0, name:'< TC1⁻', out:'bas'} : {k, name:TC[k][0]}); }
+const tcNum = k => +TC[k][0].charAt(2);
+function ppfClass(E){ if (E < 20) return {n:0, name:'< PPF1'}; const k = PPF.findIndex(p => E < p[2]); return {n:k+1, name:PPF[k][0]}; }
+function arClass(cbr){ return AR.find(a => cbr >= a[1] && cbr < a[2]) || AR[0]; }
+function shLBTP(h){ return h <= 0.10 ? 0.01 : h <= 0.15 ? 0.01 + 0.3*(h - 0.10) : 0.025; }
+function ksLBTP(E){ return E < 50 ? 1/1.2 : E < 80 ? 1/1.1 : E < 120 ? 1/1.065 : 1; }
+function durationLBTP(road, tmja){ return (road === 'auto' || road === 'uemoa' || (road === 'rn' && tmja > 200)) ? 20 : 15; }
+function familyOf(ls){ // famille d’assise (hors couche de roulement)
+  const assise = ls.slice(0, -1).filter((l, i) => l.mat ? !(l.mat === 'BBSG' || l.mat === 'BBM') : i > 0);
+  if (assise.some(l => l.type === 'bitume')) return 'bitumineuse';
+  if (assise.some(l => l.type === 'ameliore')) return 'ameliore';
+  return 'nt';
+}
+function epsZrule(fam, tcN){ // Fasc. 2, §9
+  if (fam === 'bitumineuse') return {A: tcN <= 2 ? 16000 : tcN <= 4 ? 14000 : 13000, ka:1};
+  return {A:20000, ka: fam === 'ameliore' ? 1.20 : 1};
+}
+function epsTadmLBTP(c, NE, risk, h, Epf){ // εt,adm = ε6 (NE/1e6)^b kθ kr ks kc
+  const Sh = shLBTP(h), k = LEA.kr(risk, c.b, c.SN, Sh), ks = ksLBTP(Epf);
+  return {value: c.eps6 * Math.pow(NE/1e6, c.b) * c.kth * k.kr * ks * c.kc, kr:k.kr, u:k.u, Sh, ks};
+}
+
+/* ======================================================================
+   ÉTAT
+   ====================================================================== */
+const TYPES = {
+  bitume:{label:'Bitumineux', color:'--l-bitume'},
+  mtlh:{label:'Traité aux liants hydrauliques', color:'--l-mtlh'},
+  ameliore:{label:'Amélioré au ciment', color:'--l-mtlh'},
+  nt:{label:'Non traité', color:'--l-nt'},
+  sol:{label:'Plateforme / sol', color:'--l-sol'},
+};
+const DEF = { // paramètres du calcul libre (NF P 98-086)
+  bitume:{eps6:100, invb:-5, E10:7200, Eteq:2000, SN:0.25, Sh:0.025, ks:1, kc:1.1},
+  mtlh:{sig6:0.75, invb:-15, SN:1.0, Sh:0.03, kd:1, ks:1, kc:1.4},
+  sol:{A:12000, exp:-0.222},
+};
+const PLABEL = {eps6:'ε6 (µdéf)', invb:'1/b', b:'b', E10:'E 10 °C (MPa)', Eteq:'E θéq (MPa)', SN:'SN', Sh:'Sh (m)', ks:'ks', kc:'kc', kth:'kθ', sig6:'σ6 (MPa)', kd:'kd', A:'A', exp:'Exposant'};
+
+let ref = 'lbtp', layers = [], view = 'solls', last = null, dirty = false, lastFiche = null;
+
+function layerFromMat(m, h, name, itf){
+  const M = MAT[m];
+  return {mat:m, type:M.type, name: name || M.label.split(' — ')[0], h, E:M.E, nu:M.nu, itf:itf || 'colle',
+    active: M.active !== false, auto: !!M.nl, nl: M.nl ? {...M.nl} : null, crit: M.crit ? {...M.crit} : null};
+}
+function layerLibre(type, h, E, name){ return {mat:null, type, name, h, E, nu:0.35, itf:'colle', active:true, auto:false, nl:null, crit: DEF[type] ? {...DEF[type]} : null}; }
+function initLayers(){
+  layers = ref === 'lbtp'
+    ? [layerFromMat('BBSG',5,'Roulement'), layerFromMat('GNT',20,'Base'), layerFromMat('GNT',20,'Fondation'), layerFromMat('PF',undefined,'Plateforme')]
+    : [layerLibre('bitume',6,5400,'Couche 1'), layerLibre('nt',25,400,'Couche 2'), layerLibre('sol',undefined,50,'Plateforme')];
+  if (ref === 'lbtp') layers[3].E = +$('c-epf').value || 80;
+}
+
+/* ======================================================================
+   MODULES DES NON TRAITÉS (sous-couches de 25 cm, E = min(k·E inf., Emax))
+   ====================================================================== */
+function discretize(ls){
+  const n = ls.length, parts = new Array(n);
+  let Ebelow = ls[n-1].E; parts[n-1] = {hs:0, Es:[ls[n-1].E]};
+  for (let i = n-2; i >= 0; i--){
+    const l = ls[i];
+    if (ref === 'lbtp' && l.nl && l.auto){
+      const ns = Math.max(1, Math.ceil(l.h/25 - 1e-9)), Es = [];
+      for (let s = 0; s < ns; s++){ const E = Math.min(l.nl.k * Ebelow, l.nl.Emax); Es.unshift(E); Ebelow = E; }
+      parts[i] = {hs:l.h/ns, Es};
+    } else { parts[i] = {hs:l.h, Es:[l.E]}; Ebelow = l.E; }
+  }
+  const comp = [];
+  ls.forEach((l, i) => {
+    if (i === n-1){ comp.push({E:l.E, nu:l.nu, parent:i}); return; }
+    parts[i].Es.forEach((E, s) => comp.push({h:parts[i].hs/100, E, nu:l.nu, parent:i, itf: s === parts[i].Es.length-1 ? l.itf : 'colle'}));
+  });
+  return {comp, parts};
+}
+
+/* ======================================================================
+   FORMULAIRE
+   ====================================================================== */
+function matOptions(sel){
+  return Object.entries(MAT).map(([k,v]) => `<option value="${k}" ${k===sel?'selected':''}>${esc(v.label)}</option>`).join('');
+}
+function critFields(l, i){
+  if (!l.crit) return '';
+  let keys;
+  if (l.type === 'bitume') keys = ref === 'lbtp' ? ['eps6','b','SN','kth','kc'] : ['eps6','invb','E10','Eteq','SN','Sh','ks','kc'];
+  else if (l.type === 'mtlh') keys = ['sig6','invb','SN','Sh','kd','ks','kc'];
+  else if (l.type === 'sol') keys = ref === 'lbtp' ? [] : ['A','exp'];
+  else keys = [];
+  if (!keys.length) return '';
+  keys.forEach(k => { if (l.crit[k] === undefined){ const d = (DEF[l.type]||{})[k]; l.crit[k] = d !== undefined ? d : (k==='b' ? -0.2 : k==='kth' ? 1.9 : 1); } });
+  return `<details class="crit"><summary>Paramètres de fatigue / admissibles</summary><div class="three">${keys.map(k => `<div><label for="L${i}-c-${k}">${PLABEL[k]}</label><input id="L${i}-c-${k}" data-ck="${k}" type="number" step="any" value="${l.crit[k]}"></div>`).join('')}</div>${ref==='lbtp' && l.type==='bitume' ? '<p class="hint">Sh, ks et le risque sont déduits de l’épaisseur, de la plateforme et de la classe TC.</p>' : ''}${ref==='libre' && l.type==='sol' ? '<p class="hint">A = 12 000 (trafic fort, NF P 98-086) ; 16 000 (trafic faible) ; 20 000 (LBTP, assise non traitée).</p>' : ''}${l.mat && MAT[l.mat].note ? `<p class="hint">${esc(MAT[l.mat].note)}</p>` : ''}</details>`;
+}
+let discCache = null;
+function renderLayers(){
+  const box = $('layers'); box.innerHTML = '';
+  try { discCache = discretize(layers); } catch(e) { discCache = null; }
+  layers.forEach((l, i) => {
+    const isLast = i === layers.length - 1;
+    const div = document.createElement('div');
+    div.className = 'layer'; div.style.setProperty('--sw', `var(${TYPES[l.type].color})`);
+    const autoE = ref === 'lbtp' && l.nl && l.auto && !isLast;
+    const Es = discCache && discCache.parts[i] ? discCache.parts[i].Es : [];
+    const hasCrit = l.type === 'bitume' || l.type === 'mtlh';
+    div.innerHTML = `
+      <div class="layer-head"><b>${isLast ? 'PLATEFORME' : 'COUCHE ' + (i+1)}</b>${layers.length > 2 && !isLast ? `<button type="button" class="link" data-del="${i}">Supprimer</button>` : ''}</div>
+      ${ref === 'lbtp' && !isLast ? `<label for="L${i}-mat">Matériau</label><select id="L${i}-mat">${matOptions(l.mat || 'X')}</select>` : ''}
+      <div class="two">
+        <div><label for="L${i}-name">Désignation</label><input id="L${i}-name" type="text" value="${esc(l.name)}"></div>
+        <div><label for="L${i}-type">Nature</label><select id="L${i}-type" ${ref==='lbtp' && l.mat && l.mat!=='X' ? 'disabled' : ''}>${Object.entries(TYPES).filter(([k]) => ref==='lbtp' ? k!=='mtlh' : k!=='ameliore').map(([k,v]) => `<option value="${k}" ${k===l.type?'selected':''}>${v.label}</option>`).join('')}</select></div>
+      </div>
+      <div class="three">
+        <div><label for="L${i}-h">h <span>cm</span></label>${isLast ? '<input id="L'+i+'-h" type="text" value="∞" disabled>' : `<input id="L${i}-h" type="number" step="any" min="0.5" value="${l.h}">`}</div>
+        <div><label for="L${i}-E">E <span>MPa</span></label><input id="L${i}-E" type="number" step="any" min="1" value="${autoE ? '' : l.E}" ${autoE ? 'disabled placeholder="auto"' : ''}></div>
+        <div><label for="L${i}-nu">ν</label><input id="L${i}-nu" type="number" step="any" min="0.05" max="0.49" value="${l.nu}"></div>
+      </div>
+      ${isLast && ref==='lbtp' ? `<p class="sub">Classe de portance : <b>${ppfClass(l.E).name}</b></p>` : ''}
+      ${ref==='lbtp' && l.nl && !isLast ? `<label class="check"><input type="checkbox" id="L${i}-auto" ${l.auto?'checked':''}> Module automatique : k = ${F(l.nl.k,1)}, Emax = ${F(l.nl.Emax,0)} MPa</label>${autoE ? `<p class="sub">Sous-couches de ${F(discCache.parts[i].hs,1)} cm : E = ${Es.map(e => F(e,0)).join(' / ')} MPa (haut → bas)</p>` : ''}` : ''}
+      ${hasCrit ? `<label class="check"><input type="checkbox" id="L${i}-active" ${l.active?'checked':''}> Vérifier ${l.type==='bitume' ? 'εt (fatigue)' : 'σt (fatigue)'} en base de couche</label>` : ''}
+      ${isLast ? '' : `<label for="L${i}-itf">Interface avec la couche inférieure</label><select id="L${i}-itf"><option value="colle" ${l.itf==='colle'?'selected':''}>Collée</option><option value="semi" ${l.itf==='semi'?'selected':''}>Semi-collée</option><option value="glisse" ${l.itf==='glisse'?'selected':''}>Glissante</option></select>`}
+      ${critFields(l, i)}`;
+    box.appendChild(div);
+    const bind = (k, parse, rerender) => { const el = $(`L${i}-${k}`); if (!el || el.disabled) return; el.addEventListener(el.tagName==='SELECT' || el.type==='checkbox' ? 'change' : 'input', () => { l[k] = parse(el); if (rerender) renderLayers(); stale(); }); };
+    bind('name', el => el.value); bind('h', el => parseFloat(el.value), false); bind('E', el => parseFloat(el.value)); bind('nu', el => parseFloat(el.value)); bind('itf', el => el.value);
+    bind('active', el => el.checked); bind('auto', el => el.checked, true);
+    const tEl = $(`L${i}-type`); if (tEl && !tEl.disabled) tEl.addEventListener('change', () => { l.type = tEl.value; l.crit = ref==='libre' ? (DEF[l.type] ? {...DEF[l.type]} : null) : (l.type==='bitume' ? {eps6:100,b:-0.2,SN:0.25,kth:1.9,kc:1.1} : null); renderLayers(); stale(); });
+    const mEl = $(`L${i}-mat`); if (mEl) mEl.addEventListener('change', () => { const nl = layerFromMat(mEl.value, l.h, l.name, l.itf); layers[i] = nl; renderLayers(); refreshOpt(); stale(); });
+    div.querySelectorAll('[data-ck]').forEach(el => el.addEventListener('input', () => { l.crit[el.dataset.ck] = parseFloat(el.value); stale(); }));
+    if (isLast){ const eEl = $(`L${i}-E`); eEl.addEventListener('change', () => { if (ref==='lbtp') { $('c-epf').value = l.E; renderLayers(); updateCatalogue(); } }); }
+    const hEl = $(`L${i}-h`); if (hEl && !isLast) hEl.addEventListener('change', () => { if (ref==='lbtp') renderLayers(); });
+  });
+  box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => { layers.splice(+b.dataset.del, 1); renderLayers(); refreshOpt(); stale(); }));
+}
+$('add-layer').addEventListener('click', () => {
+  layers.splice(layers.length - 1, 0, ref === 'lbtp' ? layerFromMat('GNT', 20, 'Couche ' + layers.length) : layerLibre('nt', 15, 200, 'Couche ' + layers.length));
+  renderLayers(); refreshOpt(); stale();
+});
+function refreshOpt(){
+  const sel = $('o-layer'), prev = sel.value;
+  sel.innerHTML = layers.slice(0,-1).map((l,i) => `<option value="${i}">${esc(l.name)} (couche ${i+1})</option>`).join('');
+  const def = layers.length > 2 ? 1 : 0;
+  sel.value = prev !== '' && +prev < layers.length-1 ? prev : String(def);
+}
+function loadUI(){ $('dwrap').style.visibility = $('load-type').value === 'single' ? 'hidden' : 'visible'; }
+$('load-type').addEventListener('change', loadUI);
+
+/* ---------------- référentiel ---------------- */
+function setRef(r, rebuild){
+  ref = r;
+  document.body.classList.toggle('mode-lbtp', r === 'lbtp'); document.body.classList.toggle('mode-libre', r === 'libre');
+  document.querySelectorAll('[data-ref]').forEach(b => { b.classList.toggle('on', b.dataset.ref === r); b.setAttribute('aria-pressed', b.dataset.ref === r); });
+  $('chip-ref').innerHTML = r === 'lbtp' ? 'LBTP 2024 · CÔTE D’IVOIRE<span>Essieu 130 kN · θéq 32 °C · 20 Hz</span>' : 'NF P 98-086<span>Méthode rationnelle · coefficients saisis</span>';
+  $('scope').innerHTML = r === 'lbtp'
+    ? '<b>Référentiel LBTP 2024 :</b> θéq 32 °C, 20 Hz ; risque, Sh, ks, kθ, kc et critère εz appliqués automatiquement ; modules des non traités par sous-couches (k, Emax). Paramètres repris du cahier des charges, à confronter au manuel.'
+    : '<b>Calcul libre :</b> couches élastiques linéaires, isotropes, d’extension latérale infinie ; interfaces collées, semi-collées ou glissantes ; coefficients NF P 98-086 saisis couche par couche. Convention d’affichage Alizé-LCPC.';
+  $('t-n').disabled = r === 'lbtp';
+  if (rebuild){ initLayers(); renderLayers(); refreshOpt(); }
+  updateProject(); updateCatalogue();
+}
+document.querySelectorAll('[data-ref]').forEach(b => b.addEventListener('click', () => { if (b.dataset.ref === ref) return; setRef(b.dataset.ref, true); last = null; calculate(); }));
+
+/* ---------------- projet, trafic ---------------- */
+$('p-region').innerHTML = Object.entries(REGIONS).map(([k,v]) => `<option value="${k}">${v.nom}</option>`).join('');
+$('p-region').value = 'R2';
+function updateProject(){
+  const R = $('p-region').value;
+  const fiches = FICHES.filter(f => f.reg.includes(R)).map(f => f.id).join(', ');
+  $('region-out').innerHTML = `Ressources : ${esc(REGIONS[R].res)}.<br>Fiches applicables : ${fiches}.`;
+  if (ref === 'lbtp') $('t-n').value = durationLBTP($('p-road').value, +$('p-tmja').value);
+}
+['p-region','p-road','p-tmja'].forEach(id => $(id).addEventListener('input', () => { updateProject(); updateCatalogue(); }));
+function trafficInfo(){
+  const t = {MJA:+$('t-mja').value, n:+$('t-n').value, tau:(+$('t-tau').value)/100, mode: ref==='lbtp' ? 'arith' : $('t-mode').value, CAM:+$('t-cam').value};
+  const forced = parseFloat($('t-ne').value);
+  let base;
+  if (Number.isFinite(forced) && forced > 0) base = {NE: forced, forced:true};
+  else if (t.MJA > 0 && t.n > 0 && t.tau >= 0 && t.CAM > 0) base = {...LEA.trafficNE({...t, tau: t.tau || 1e-9}), forced:false};
+  else return null;
+  const out = {...base, NEcalc: base.NE};
+  if (ref === 'lbtp'){
+    const c = tcClass(base.NE); out.tc = c; out.tcN = tcNum(c.k);
+    if (!c.out && $('t-upper').checked) out.NE = TC[c.k][2];
+    out.risk = RISK[out.tcN];
+  } else out.risk = (+$('t-risk').value)/100;
+  return out;
+}
+function updateTraffic(){
+  const t = trafficInfo(); const el = $('traffic-out');
+  if (!t){ el.innerHTML = 'Données de trafic incomplètes.'; return; }
+  let s = t.forced ? `NE imposé : <b>${F(t.NEcalc,0)}</b>` : `C = ${F(t.C,2)} · NPL = ${F(t.NPL,0)} · NE = <b>${F(t.NEcalc,0)}</b>`;
+  if (ref === 'lbtp'){
+    s += `<br>Classe <span class="chip">${t.tc.name}</span> risque ${F(t.risk*100,0)} % · durée ${$('t-n').value} ans`;
+    if (t.tc.out) s += `<br><span class="chip bad">Hors catalogue</span> NE ${t.tc.out === 'bas' ? 'inférieur à 70 000' : 'supérieur à 50 × 10⁶'}`;
+    else if (t.NE !== t.NEcalc) s += `<br>NE de calcul (borne supérieure) : <b>${F(t.NE,0)}</b>`;
+  }
+  el.innerHTML = s;
+}
+['t-mja','t-n','t-tau','t-mode','t-cam','t-risk','t-ne','t-upper'].forEach(id => $(id).addEventListener('input', () => { updateTraffic(); updateCatalogue(); }));
+
+/* ---------------- catalogue ---------------- */
+function ficheCompat(f, R, tcK, ppfN){
+  const why = [];
+  if (!f.reg.includes(R)) why.push(`région ${R}`);
+  if (tcK !== null && (tcK < tci(f.tc[0]) || tcK > tci(f.tc[1]))) why.push('classe de trafic');
+  if (ppfN < f.ppf[0] || ppfN > f.ppf[1]) why.push('portance');
+  return why;
+}
+function updateCatalogue(){
+  if (ref !== 'lbtp') return;
+  const R = $('p-region').value, t = trafficInfo(), tcK = t && !t.tc.out ? t.tc.k : null;
+  const Epf = +$('c-epf').value, ppf = ppfClass(Epf);
+  const sel = $('c-fiche'), prev = sel.value, all = $('c-all').checked;
+  const list = FICHES.map(f => ({f, why: ficheCompat(f, R, tcK, ppf.n)})).filter(x => all || !x.why.length);
+  sel.innerHTML = list.length ? list.map(({f, why}) => `<option value="${f.id}">${f.id} — ${f.base} / ${f.fond}${why.length ? ' (hors domaine : ' + why.join(', ') + ')' : ''}</option>`).join('') : '<option value="">Aucune fiche compatible</option>';
+  if (list.some(x => x.f.id === prev)) sel.value = prev;
+  const f = FICHES.find(x => x.id === sel.value);
+  const box = $('fiche-out');
+  if (!f){ box.innerHTML = `<div class="fiche">Aucune fiche ne couvre ${esc(R)}, ${t ? t.tc.name : '—'} et ${ppf.name}. Cochez l’affichage des fiches hors domaine ou revoyez la portance.</div>`; $('c-apply').disabled = true; return; }
+  $('c-apply').disabled = false;
+  const why = ficheCompat(f, R, tcK, ppf.n);
+  box.innerHTML = `<div class="fiche"><b>${f.id} · ${esc(f.fam)}</b><br>Base ${esc(MAT[f.base].label)}<br>Fondation ${esc(MAT[f.fond].label)}<br>Domaine : ${f.tc[0]} à ${f.tc[1]} · ${f.reg.length === 7 ? 'toutes régions' : f.reg.join(', ')} · PPF${f.ppf[0]} à PPF${f.ppf[1]}<br>Plateforme : ${F(Epf,0)} MPa → <b>${ppf.name}</b>${why.length ? `<br><span class="chip warn">Hors domaine</span> ${why.join(', ')}` : ' <span class="chip lime">Dans le domaine</span>'}</div>`;
+}
+['c-fiche','c-all','c-epf'].forEach(id => $(id).addEventListener('input', updateCatalogue));
+$('c-epf').addEventListener('change', () => { if (ref==='lbtp'){ layers[layers.length-1].E = +$('c-epf').value; renderLayers(); stale(); } });
+$('c-apply').addEventListener('click', () => {
+  const f = FICHES.find(x => x.id === $('c-fiche').value); if (!f) return;
+  const roul = $('c-roul').value, ls = [];
+  if (roul === 'BBSG5') ls.push(layerFromMat('BBSG', 5, 'Roulement BBSG'));
+  else if (roul === 'BBM4') ls.push(layerFromMat('BBM', 4, 'Roulement BBM'));
+  else if (roul === 'BBM3') ls.push(layerFromMat('BBM', 3, 'Roulement BBM'));
+  const base = layerFromMat(f.base, START_H[f.base], 'Base ' + f.base), fond = layerFromMat(f.fond, START_H[f.fond], 'Fondation ' + f.fond);
+  if (roul === 'ES'){ base.name += ' (sous enduit)'; }
+  ls.push(base, fond);
+  const pf = layerFromMat('PF', undefined, 'Plateforme'); pf.E = +$('c-epf').value; ls.push(pf);
+  layers = ls; lastFiche = f.id;
+  renderLayers(); refreshOpt(); $('o-layer').value = String(roul === 'ES' ? 0 : 1);
+  toast(`Structure ${f.id} construite : ajustez les épaisseurs ou lancez l’optimisation.`);
+  calculate();
+});
+
+/* ---------------- portance (arase + couche de forme) ---------------- */
+function eqModulus(E1, h1, E2){ // flèche au centre, charge souple a = 0,30 m
+  const a = 0.30, q = 0.1, nu = 0.35;
+  const w = LEA.circular(q, a, [{h:h1, E:E1, nu}, {E:E2, nu}], [{r:0, z:0}], {mAlphaMax:300})[0].w;
+  return 2*q*a*(1 - nu*nu)/w;
+}
+function updatePPF(){
+  const cbr = +$('f-cbr').value, Ear = +$('f-ear').value, h = +$('f-h').value/100, Ecf = +$('f-ecf').value;
+  const ar = arClass(cbr);
+  let s = `Arase : CBR ${F(cbr,0)} → <b>${ar[0]}</b> (E ${ar[3]} MPa) · corrélation usuelle E ≈ 5·CBR = ${F(5*cbr,0)} MPa`;
+  if (Ear > 0 && Ecf > 0 && h > 0){ const Eq = eqModulus(Ecf, h, Ear); updatePPF.E = Eq; s += `<br>Module équivalent de la plateforme : <b>${F(Eq,0)} MPa</b> → <b>${ppfClass(Eq).name}</b>`; }
+  else if (Ear > 0 && h === 0){ updatePPF.E = Ear; s += `<br>Sans couche de forme : <b>${ppfClass(Ear).name}</b>`; }
+  $('ppf-out').innerHTML = s;
+}
+['f-cbr','f-ear','f-h','f-ecf'].forEach(id => $(id).addEventListener('input', updatePPF));
+$('ppf-tool').addEventListener('toggle', () => { if ($('ppf-tool').open) updatePPF(); });
+$('f-apply').addEventListener('click', () => { if (!updatePPF.E) return; const E = Math.round(updatePPF.E); layers[layers.length-1].E = E; $('c-epf').value = E; renderLayers(); updateCatalogue(); stale(); toast(`Plateforme : E = ${E} MPa (${ppfClass(E).name}).`); });
+
+/* ======================================================================
+   LECTURE ET CALCUL
+   ====================================================================== */
+function readAll(){
+  const single = $('load-type').value === 'single';
+  const load = {q:+$('load-q').value, a:+$('load-a').value, d: single ? 0 : +$('load-d').value, single};
+  const errs = [];
+  if (!(load.q > 0 && load.q < 5)) errs.push('Pression q : valeur comprise entre 0 et 5 MPa.');
+  if (!(load.a > 0 && load.a < 1)) errs.push('Rayon a : valeur comprise entre 0 et 1 m.');
+  if (!single && !(load.d > 2*load.a)) errs.push('Entraxe d : il doit dépasser le diamètre de la roue (2a).');
+  if (layers.length < 2) errs.push('La structure doit comporter au moins une couche et une plateforme.');
+  layers.forEach((l, i) => {
+    const n = l.name || ('couche ' + (i+1)), autoE = ref==='lbtp' && l.nl && l.auto && i < layers.length-1;
+    if (i < layers.length - 1 && !(l.h >= 0.5 && l.h <= 200)) errs.push(`${n} : épaisseur entre 0,5 et 200 cm.`);
+    if (!autoE && !(l.E > 0)) errs.push(`${n} : module E strictement positif.`);
+    if (!(l.nu > 0 && l.nu < 0.5)) errs.push(`${n} : coefficient de Poisson entre 0 et 0,5.`);
+    if (l.crit && Object.values(l.crit).some(v => !Number.isFinite(v))) errs.push(`${n} : paramètres de fatigue incomplets.`);
+  });
+  const traffic = trafficInfo();
+  if (!traffic) errs.push('Trafic : MJA, durée et CAM strictement positifs, taux positif ou nul, ou NE imposé.');
+  else if (!(traffic.risk > 0 && traffic.risk < 1)) errs.push('Risque : valeur comprise entre 0 et 100 %.');
+  if (errs.length) throw new Error(errs.join(' '));
+  return {load, traffic, risk: traffic.risk, ref, region: $('p-region').value, fiche: lastFiche, n: +$('t-n').value};
+}
+
+function solveComp(load, comp, bonded){
+  const lay = comp.map((c,k) => ({h:c.h, E:c.E, nu:c.nu, bonded: bonded[k]}));
+  const depths = [], meta = [];
+  let z = 0; const n = layers.length;
+  const tops = []; comp.forEach((c,k) => { if (k === 0 || comp[k-1].parent !== c.parent) tops.push({i:c.parent, z}); if (c.h) z += c.h; });
+  tops.forEach((t, j) => {
+    depths.push(t.i === 0 ? 0 : t.z + 1e-6); meta.push({i:t.i, pos:'haut', z:t.z});
+    if (t.i < n-1){ const zb = j+1 < tops.length ? tops[j+1].z : z; depths.push(zb - 1e-6); meta.push({i:t.i, pos:'bas', z:zb}); }
+  });
+  let rows;
+  if (load.single){
+    const R = LEA.circular(load.q, load.a, lay, depths.map(zz => ({r:0, z:zz})), {mAlphaMax:300});
+    rows = R.map((o,k) => ({z:depths[k], epsT:-Math.min(o.er,o.et)*1e6, epsTAt:'R', sigT:-Math.min(o.sr,o.st), sigTAt:'R', epsZ:o.ez*1e6, epsZAt:'R', sigZ:o.sz}));
+  } else rows = LEA.dualWheel(load, lay, depths);
+  const y = 0.015, xJ = load.d/2;
+  const P = load.single ? [{r:0,z:0},{r:y,z:0}] : [{r:xJ,z:0},{r:Math.hypot(xJ,y),z:0}];
+  const W = LEA.circular(load.q, load.a, lay, P, {mAlphaMax:200});
+  let dJ, Rc;
+  if (load.single){ dJ = W[0].w; Rc = y*y/(2*(W[0].w - W[1].w)); }
+  else { dJ = 2*W[0].w; Rc = y*y/(2*(dJ - 2*W[1].w)); }
+  return {rows, meta, defl:dJ*1e5, Rc};
+}
+function compute(p){
+  const {comp, parts} = discretize(layers);
+  const itf = comp.slice(0,-1).map(c => c.itf || 'colle');
+  let res;
+  if (itf.includes('semi')){
+    const A = solveComp(p.load, comp, itf.map(x => x !== 'glisse')), B = solveComp(p.load, comp, itf.map(x => x === 'colle'));
+    res = {meta:A.meta, rows:A.rows.map((r,k) => { const s = B.rows[k], o = {...r}; ['epsT','sigT','epsZ','sigZ'].forEach(key => o[key] = (r[key]+s[key])/2); return o; }), defl:(A.defl+B.defl)/2, Rc:(A.Rc+B.Rc)/2};
+  } else res = solveComp(p.load, comp, itf.map(x => x !== 'glisse'));
+  res.parts = parts; res.ncomp = comp.length;
+  return res;
+}
+function checks(res, p){
+  const out = [], NE = p.traffic.NE, Epf = layers[layers.length-1].E;
+  const fam = familyOf(layers), tcN = p.traffic.tcN;
+  layers.forEach((l, i) => {
+    const isLast = i === layers.length - 1;
+    let adm, kind, pos, extra, d, factor = 1, calcRaw;
+    if (l.type === 'bitume' && !isLast){
+      if (!l.active) return;
+      const c = l.crit;
+      if (p.ref === 'lbtp'){ const r = epsTadmLBTP(c, NE, p.risk, l.h/100, Epf); adm = r.value; extra = `kθ ${F(c.kth,2)} · kr ${F(r.kr,4)} · ks ${F(r.ks,3)} · Sh ${F(r.Sh*100,1)} cm · kc ${F(c.kc,2)}`; }
+      else { const r = LEA.epsTadm({eps6:c.eps6, b:1/c.invb, E10:c.E10, Eteq:c.Eteq, risk:p.risk, SN:c.SN, Sh:c.Sh, ks:c.ks, kc:c.kc, NE}); adm = r.value; extra = `kθ ${F(r.ktheta,3)} · kr ${F(r.kr,4)}`; }
+      kind = 'εt (µdéf)'; pos = 'bas'; d = 1;
+    } else if (l.type === 'mtlh' && !isLast){
+      if (!l.active) return;
+      const c = l.crit; const r = LEA.sigTadm({sig6:c.sig6, b:1/c.invb, risk:p.risk, SN:c.SN, Sh:c.Sh, kd:c.kd, ks:c.ks, kc:c.kc, NE}); adm = r.value; kind = 'σt (MPa)'; pos = 'bas'; extra = `kr ${F(r.kr,4)}`; d = 3;
+    } else if (isLast){
+      if (p.ref === 'lbtp'){ const rule = epsZrule(fam, tcN || 1); adm = rule.A * Math.pow(NE, -0.222); factor = rule.ka; extra = `A ${F(rule.A,0)} (assise ${fam === 'bitumineuse' ? 'bitumineuse' : fam === 'ameliore' ? 'améliorée au ciment' : 'non traitée'})${rule.ka !== 1 ? ` · ka ${F(rule.ka,2)}` : ''}`; }
+      else { adm = LEA.epsZadm({A:l.crit.A, exp:l.crit.exp, NE}).value; extra = `A ${F(l.crit.A,0)}`; }
+      kind = 'εz (µdéf)'; pos = 'haut'; d = 1;
+    } else return;
+    const k = res.meta.findIndex(m => m.i === i && m.pos === pos);
+    const r = res.rows[k];
+    calcRaw = l.type === 'bitume' ? r.epsT : l.type === 'mtlh' ? r.sigT : r.epsZ;
+    const calc = calcRaw * factor;
+    if ((l.type === 'bitume' || l.type === 'mtlh') && calc <= 0) extra += ' · base de couche comprimée';
+    out.push({i, l, kind, pos, calc, calcRaw, factor, adm, ratio: Math.max(calc, 0)/adm, extra, d});
+  });
+  return out;
+}
+function warnings(p, res, cs){
+  const W = [];
+  if (p.ref !== 'lbtp') return W;
+  const t = p.traffic, Epf = layers[layers.length-1].E, ppf = ppfClass(Epf);
+  if (t.tc.out) W.push(['bad', `NE hors du domaine du catalogue (${t.tc.name}).`]);
+  if (ppf.n <= 1) W.push(['bad', `Plateforme ${ppf.name} (E = ${F(Epf,0)} MPa) : exclue du catalogue, PPF2 au minimum (Fasc. 3, §4).`]);
+  else if (t.tcN >= 4 && ppf.n < 3) W.push(['bad', `Trafic ${t.tc.name} : PPF3 au minimum exigée (plateforme ${ppf.name}).`]);
+  layers.slice(0,-1).forEach(l => { const M = l.mat && MAT[l.mat]; if (M && M.h && (l.h < M.h[0] || l.h > M.h[1])) W.push(['', `${esc(l.name)} : ${F(l.h,1)} cm hors de la plage d’épaisseur usuelle ${M.h[0]}-${M.h[1]} cm (${esc(l.mat)}).`]); });
+  if (p.fiche){ const f = FICHES.find(x => x.id === p.fiche); const why = ficheCompat(f, p.region, t.tc.out ? null : t.tc.k, ppf.n); if (why.length) W.push(['', `Fiche ${f.id} utilisée hors de son domaine d’emploi : ${why.join(', ')}.`]); }
+  if (!W.length) W.push(['ok', 'Domaine d’emploi, portance minimale et épaisseurs usuelles respectés.']);
+  return W;
+}
+
+/* ======================================================================
+   RENDU
+   ====================================================================== */
+function sectionSVG(res, p){
+  const W = 760, left = 175, right = 745, top = 64;
+  const total = layers.slice(0,-1).reduce((s,l) => s + l.h, 0) || 1;
+  const scale = Math.min(190/total, 6);
+  let y = top, out = '';
+  const cx = (left+right)/2, px = 250;
+  const wheel = x => `<rect x="${x - p.load.a*px}" y="${top-32}" width="${2*p.load.a*px}" height="24" rx="5" fill="#28362e"/><rect x="${x - p.load.a*px}" y="${top-6}" width="${2*p.load.a*px}" height="5" fill="#89b82d"/>`;
+  if (p.load.single) out += wheel(cx); else { out += wheel(cx - p.load.d/2*px) + wheel(cx + p.load.d/2*px); out += `<text x="${cx}" y="${top-40}" text-anchor="middle" font-size="11" fill="#65736a">d = ${F(p.load.d,3)} m</text>`; }
+  out += `<text x="${right}" y="${top-40}" text-anchor="end" font-size="11" fill="#65736a">q = ${F(p.load.q,3)} MPa · a = ${F(p.load.a,3)} m</text>`;
+  const ys = [];
+  layers.forEach((l, i) => {
+    const isLast = i === layers.length-1, h = isLast ? 50 : Math.max(l.h*scale, 16);
+    ys.push([y, h]);
+    out += `<rect x="${left}" y="${y}" width="${right-left}" height="${h}" fill="var(${TYPES[l.type].color})" ${isLast ? 'opacity=".8"' : ''}/>`;
+    const Es = res.parts[i].Es;
+    if (!isLast && Es.length > 1) for (let s = 1; s < Es.length; s++) out += `<line x1="${left}" y1="${y + h*s/Es.length}" x2="${right}" y2="${y + h*s/Es.length}" stroke="#fff" stroke-opacity=".5" stroke-dasharray="3 4"/>`;
+    if (isLast) for (let x = left; x < right; x += 14) out += `<line x1="${x}" y1="${y+h}" x2="${x+14}" y2="${y+h-14}" stroke="#fff" opacity=".35"/>`;
+    out += `<text x="${left-10}" y="${y+h/2-2}" text-anchor="end" font-size="12" fill="#28362e" font-weight="700">${esc(l.name)}</text>`;
+    out += `<text x="${left-10}" y="${y+h/2+12}" text-anchor="end" font-size="11" fill="#65736a">${isLast ? '∞' : F(l.h,1)+' cm'} · ${Es.map(e => F(e,0)).join('/')} MPa</text>`;
+    if (!isLast && l.itf !== 'colle') out += `<line x1="${left}" y1="${y+h}" x2="${right}" y2="${y+h}" stroke="#946119" stroke-width="2" stroke-dasharray="${l.itf==='glisse'?'7 4':'2 3'}"/>`;
+    y += h;
+  });
+  checks(res, p).forEach(c => {
+    const [yy, h] = ys[c.i], at = c.pos === 'bas' ? yy + h : yy;
+    const col = c.ratio <= 1 ? '#54800e' : '#a7402a';
+    out += `<circle cx="${right-160}" cy="${at}" r="4.5" fill="${col}" stroke="#fff" stroke-width="1.5"/><text x="${right-150}" y="${c.pos==='bas' ? at-6 : at+15}" font-size="11.5" fill="#fff" font-weight="700" paint-order="stroke" stroke="rgba(0,0,0,.35)" stroke-width="3">${c.kind.split(' ')[0]} ${F(c.calcRaw,c.d)} · ${F(c.ratio*100,0)} %</text>`;
+  });
+  return `<svg class="section-svg" viewBox="0 0 ${W} ${y+12}" role="img" aria-label="Coupe de la structure avec points de calcul">${out}</svg>`;
+}
+function ctxLine(p){
+  const t = p.traffic, Epf = layers[layers.length-1].E;
+  if (p.ref === 'lbtp') return `<div class="ctx"><span class="chip">LBTP 2024</span><span>NE <b>${F(t.NE,0)}</b></span><span>Classe <b>${t.tc.name}</b></span><span>Risque <b>${F(p.risk*100,0)} %</b></span><span>Plateforme <b>${ppfClass(Epf).name}</b> (${F(Epf,0)} MPa)</span><span>Région <b>${p.region}</b></span><span>Durée <b>${p.n} ans</b></span>${p.fiche ? `<span>Fiche <b>${p.fiche}</b></span>` : ''}</div>`;
+  return `<div class="ctx"><span class="chip lime">NF P 98-086</span><span>NE <b>${F(t.NE,0)}</b>${t.forced?' (imposé)':''}</span><span>Risque <b>${F(p.risk*100,0)} %</b></span></div>`;
+}
+function render(){
+  const {p, res} = last;
+  const cs = checks(res, p);
+  const worst = cs.reduce((m,c) => Math.max(m, c.ratio), 0);
+  const total = layers.slice(0,-1).reduce((s,l) => s + l.h, 0);
+  const t = p.traffic;
+  let out = `<div class="strip">
+    <div><small>ÉPAISSEUR TOTALE</small><strong>${F(total,1)}</strong><em>cm</em></div>
+    <div><small>TRAFIC NE${p.ref==='lbtp' ? ' · ' + t.tc.name : ''}</small><strong>${F(t.NE/1e6,3)}</strong><em>× 10⁶</em></div>
+    <div><small>DÉFLEXION${p.ref==='lbtp' ? ' · ' + ppfClass(layers[layers.length-1].E).name : ''}</small><strong>${F(res.defl,1)}</strong><em>mm/100</em></div>
+    <div><small>TAUX MAXIMAL</small><strong>${cs.length ? F(worst*100,0) : '—'}</strong><em>%</em></div>
+  </div>`;
+  if (view === 'solls'){
+    out += `<div class="card"><h3>Coupe de la structure</h3>${ctxLine(p)}${sectionSVG(res, p)}</div>`;
+    out += `<div class="card"><div class="reshead" style="margin-bottom:8px"><div><h3 style="margin:0">Tableau des sollicitations</h3><p>EpsT et SigmaT négatifs en traction ; EpsZ et SigmaZ positifs en compression. R : sous la roue ; J : entre-jumelage.</p></div></div>
+      <div class="tbl"><table><thead><tr><th>Couche</th><th>Niveau</th><th>z (m)</th><th>E (MPa)</th><th>EpsT (µdéf)</th><th>SigmaT (MPa)</th><th>EpsZ (µdéf)</th><th>SigmaZ (MPa)</th></tr></thead><tbody>
+      ${res.rows.map((r,k) => { const m = res.meta[k], l = layers[m.i], Es = res.parts[m.i].Es, E = m.pos==='haut' ? Es[0] : Es[Es.length-1]; return `<tr><td>${m.pos==='haut' ? `<span class="sw" style="background:var(${TYPES[l.type].color})"></span>${esc(l.name)}` : ''}</td><td>${m.pos}</td><td>${F(m.z,3)}</td><td>${F(E,0)}</td><td>${F(-r.epsT,1)}<span class="pos">${r.epsTAt}</span></td><td>${F(-r.sigT,3)}<span class="pos">${r.sigTAt}</span></td><td>${F(r.epsZ,1)}<span class="pos">${r.epsZAt}</span></td><td>${F(r.sigZ,3)}</td></tr>`; }).join('')}
+      </tbody></table></div>
+      <p class="hint">Déflexion entre-jumelage ${F(res.defl,1)} mm/100 · rayon de courbure ${F(res.Rc,1)} m · ${res.ncomp} couches de calcul. Les valeurs en surface (z = 0) sont moins précises (1 à 2 %) et ne servent à aucun critère.</p></div>`;
+  } else {
+    out += `<div class="card"><div class="reshead" style="margin-bottom:8px"><h3 style="margin:0">Vérification des critères</h3><button type="button" class="link" data-action="copy">Copier la note de calcul</button></div>${ctxLine(p)}`;
+    if (!cs.length) out += `<div class="note">Aucun critère actif.</div>`;
+    else out += `<div class="tbl"><table><thead><tr><th>Couche</th><th>Critère</th><th>Calculé</th><th>Admissible</th><th>Taux</th><th style="text-align:left">Utilisation</th><th>Statut</th></tr></thead><tbody>
+      ${cs.map(c => { const cls = c.ratio <= 0.9 ? '' : c.ratio <= 1 ? 'warn' : 'bad'; const col = c.ratio <= 0.9 ? '#54800e' : c.ratio <= 1 ? '#946119' : '#a7402a'; return `<tr><td><span class="sw" style="background:var(${TYPES[c.l.type].color})"></span>${esc(c.l.name)}</td><td>${c.kind} ${c.pos==='bas'?'base':'sommet'}</td><td>${c.factor !== 1 ? `${F(c.factor,2)} × ${F(c.calcRaw,c.d)} = ` : ''}${F(c.calc,c.d)}</td><td>${F(c.adm,c.d)}</td><td>${F(c.ratio*100,0)} %</td><td style="text-align:left"><div class="bar"><i style="width:${Math.min(c.ratio,1.2)/1.2*100}%;background:${col}"></i></div></td><td><span class="badge ${cls}">${c.ratio<=1?'Vérifié':'Non vérifié'}</span></td></tr>`; }).join('')}
+      </tbody></table></div>
+      <p class="hint">${cs.map(c => `${esc(c.l.name)} : ${c.extra}`).join(' · ')}</p>`;
+    out += `<div class="note ${cs.length && worst <= 1 ? 'neutral' : ''}"><b>${!cs.length ? '' : worst <= 1 ? 'Tous les critères sont respectés.' : 'Au moins un critère n’est pas respecté : revoir les épaisseurs ou les matériaux.'}</b> NE = ${F(t.NE,0)} essieux de 130 kN${t.forced ? ' (imposé)' : ` (C = ${F(t.C,2)} ; NPL = ${F(t.NPL,0)})`}${p.ref==='lbtp' && t.NE !== t.NEcalc ? `, borne supérieure de ${t.tc.name} (trafic calculé ${F(t.NEcalc,0)})` : ''} ; risque ${F(p.risk*100,0)} %.</div>`;
+    const W = warnings(p, res, cs);
+    if (W.length) out += `<ul class="warns">${W.map(w => `<li class="${w[0]}">${w[1]}</li>`).join('')}</ul>`;
+    out += '</div>';
+  }
+  $('results').innerHTML = out;
+}
+
+function calculate(){
+  $('error').hidden = true;
+  updateTraffic();
+  try {
+    const p = readAll();
+    const res = compute(p);
+    last = {p, res}; dirty = false;
+    if (view === 'solls' || view === 'verif') render();
+    return true;
+  } catch (e) { $('error').textContent = e.message; $('error').hidden = false; return false; }
+}
+function stale(){
+  if (dirty || !last || view === 'valid' || view === 'ref') { dirty = true; return; }
+  dirty = true;
+  $('results').insertAdjacentHTML('afterbegin', '<div class="stale-msg">Données modifiées. Relancer le calcul pour actualiser les résultats.</div>');
+  for (const c of $('results').children) if (!c.classList.contains('stale-msg')) c.classList.add('stale');
+}
+
+/* ---------------- optimisation d’épaisseur ---------------- */
+function worstRatio(p){ const res = compute(p); const cs = checks(res, p); return cs.length ? Math.max(...cs.map(c => c.ratio)) : 0; }
+$('o-run').addEventListener('click', () => {
+  const i = +$('o-layer').value, l = layers[i]; if (!l) return;
+  let p; try { p = readAll(); } catch (e) { $('error').textContent = e.message; $('error').hidden = false; return; }
+  $('o-out').textContent = 'Recherche en cours…';
+  setTimeout(() => {
+    const h0 = l.h, lo0 = 3, hi0 = 80;
+    const test = h => { l.h = h; return worstRatio(p); };
+    let lo = lo0, hi = hi0;
+    if (test(hi) > 1){ l.h = h0; $('o-out').innerHTML = `<b>Aucune épaisseur jusqu’à ${hi0} cm</b> ne satisfait tous les critères : un autre critère gouverne, changez de matériau ou de couche.`; return; }
+    if (test(lo) <= 1){ hi = lo; }
+    while (hi - lo > 1){ const m = Math.floor((lo+hi)/2); if (test(m) <= 1) hi = m; else lo = m; }
+    l.h = hi; renderLayers(); calculate();
+    $('o-out').innerHTML = `Épaisseur minimale de <b>${esc(l.name)}</b> : <b>${hi} cm</b> (pas de 1 cm, toutes les autres couches fixées). À arrondir aux épaisseurs de mise en œuvre.`;
+  }, 20);
+});
+
+/* ---------------- note de calcul (presse-papiers) ---------------- */
+function copyNote(){
+  if (!last) return;
+  const {p, res} = last, t = p.traffic, cs = checks(res, p), L = [];
+  L.push('NOTE DE CALCUL — STRUCTURE DE CHAUSSÉE ({{BRAND.name}} · Chaussées Multicouche v{{MODULE.version}})');
+  L.push(p.ref === 'lbtp' ? 'Référentiel : LBTP 2024 (Côte d’Ivoire) — θéq 32 °C, 20 Hz, essieu 130 kN' : 'Référentiel : NF P 98-086 (calcul libre)');
+  if (p.ref === 'lbtp') L.push(`Région ${p.region} · durée ${p.n} ans · ${t.tc.name} · risque ${F(p.risk*100,0)} % · plateforme ${ppfClass(layers[layers.length-1].E).name}${p.fiche ? ' · fiche ' + p.fiche : ''}`);
+  L.push(`NE de calcul : ${F(t.NE,0)}${t.forced ? ' (imposé)' : ` (MJA ${$('t-mja').value}, τ ${$('t-tau').value} %, CAM ${$('t-cam').value}, C ${F(t.C,2)})`}`);
+  L.push(''); L.push(['Couche','h (cm)','E (MPa)','ν','Interface'].join('\t'));
+  layers.forEach((l,i) => L.push([l.name, i<layers.length-1 ? F(l.h,1) : '∞', res.parts[i].Es.map(e=>F(e,0)).join('/'), F(l.nu,2), i<layers.length-1 ? l.itf : ''].join('\t')));
+  L.push(''); L.push(['Couche','Critère','Calculé','Admissible','Taux','Statut'].join('\t'));
+  cs.forEach(c => L.push([c.l.name, c.kind + (c.pos==='bas'?' base':' sommet'), (c.factor!==1 ? F(c.factor,2)+' × ' : '') + F(c.calcRaw,c.d), F(c.adm,c.d), F(c.ratio*100,0)+' %', c.ratio<=1?'Vérifié':'Non vérifié'].join('\t')));
+  cs.forEach(c => L.push(`  ${c.l.name} : ${c.extra}`));
+  L.push(''); L.push(`Déflexion entre-jumelage : ${F(res.defl,1)} mm/100 ; rayon de courbure : ${F(res.Rc,1)} m`);
+  L.push(''); L.push(['Couche','Niveau','z (m)','EpsT (µdéf)','SigmaT (MPa)','EpsZ (µdéf)','SigmaZ (MPa)'].join('\t'));
+  res.rows.forEach((r,k) => { const m = res.meta[k]; L.push([layers[m.i].name, m.pos, F(m.z,3), F(-r.epsT,1), F(-r.sigT,3), F(r.epsZ,1), F(r.sigZ,3)].join('\t')); });
+  warnings(p, res, cs).forEach(w => L.push('Remarque : ' + w[1].replace(/<[^>]+>/g,'')));
+  navigator.clipboard?.writeText(L.join('\n')).then(() => toast('Note copiée : collez-la dans Word ou Excel.'), () => toast('Copie refusée par le navigateur.'));
+}
+
+/* ---------------- vue référentiel ---------------- */
+function renderRef(){
+  const tcRows = TC.map(t => `<tr><td>${t[0]}</td><td>${F(t[1]/1e6,2)}</td><td>${F(t[2]/1e6,2)}</td><td>${F(RISK[+t[0].charAt(2)]*100,0)} %</td><td>${F(LEA.normInv(RISK[+t[0].charAt(2)]),3)}</td></tr>`).join('');
+  const matRows = Object.entries(MAT).filter(([k]) => k!=='X' && k!=='PF').map(([k,m]) => `<tr><td class="l">${esc(m.label)}</td><td>${TYPES[m.type].label}</td><td>${m.nl ? `≤ ${F(m.nl.Emax,0)}` : F(m.E,0)}</td><td>${F(m.nu,2)}</td><td>${m.nl ? F(m.nl.k,1) : '—'}</td><td>${m.crit ? `${F(m.crit.eps6,0)} / ${F(m.crit.b,2)} / ${F(m.crit.SN,2)} / ${F(m.crit.kth,2)} / ${F(m.crit.kc,2)}` : '—'}</td></tr>`).join('');
+  $('refview').innerHTML = `
+  <div class="note neutral" style="margin:0 0 18px">Données du manuel LBTP 2024 intégrées à l’application, telles que transmises dans le cahier des charges. Elles sont appliquées en mode LBTP et restent modifiables couche par couche : confrontez-les au manuel avant toute note de calcul.</div>
+  <div class="ref-grid">
+    <div class="card"><h3>Classes de trafic (Fasc. 2, §8.3 ; tableau 12)</h3><div class="tbl"><table><thead><tr><th>Classe</th><th>NE min (10⁶)</th><th>NE max (10⁶)</th><th>Risque</th><th>u</th></tr></thead><tbody>${tcRows}</tbody></table></div><p class="hint">Dimensionnement à la borne supérieure de la classe.</p></div>
+    <div class="card"><h3>Portance et arase (Fasc. 1, §2.3 ; Fasc. 3, §4)</h3><div class="tbl"><table><thead><tr><th>Classe</th><th>E (MPa)</th><th>ks</th></tr></thead><tbody>${PPF.map(q => `<tr><td>${q[0]}${q[0]==='PPF1'?' (exclue)':''}</td><td>${q[2]===Infinity ? '≥ ' + q[1] : q[1] + ' à ' + q[2]}</td><td>${F(ksLBTP(q[1]),3)}</td></tr>`).join('')}</tbody></table></div>
+      <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Arase</th><th>CBR</th><th>E (MPa)</th></tr></thead><tbody>${AR.map(a => `<tr><td>${a[0]}</td><td>${a[2]===Infinity ? '≥ ' + a[1] : a[1] + ' à ' + a[2]}</td><td>${a[3]}</td></tr>`).join('')}</tbody></table></div><p class="hint">PPF2 minimum pour tout projet ; PPF3 minimum à partir de TC4.</p></div>
+    <div class="card"><h3>Régions géotechniques (Fasc. 1, §2.1)</h3><div class="tbl"><table><thead><tr><th>Région</th><th style="text-align:left">Ressources</th><th style="text-align:left">Fiches</th></tr></thead><tbody>${Object.entries(REGIONS).map(([k,r]) => `<tr><td>${esc(r.nom)}</td><td class="l">${esc(r.res)}</td><td class="l">${FICHES.filter(f => f.reg.includes(k)).map(f=>f.id).join(', ')}</td></tr>`).join('')}</tbody></table></div></div>
+    <div class="card"><h3>Catalogue F1 à F17 (Fasc. 1)</h3><div class="tbl"><table><thead><tr><th>Fiche</th><th style="text-align:left">Base / fondation</th><th>Trafic</th><th>Régions</th><th>Portance</th></tr></thead><tbody>${FICHES.map(f => `<tr><td>${f.id}</td><td class="l">${f.base} / ${f.fond}</td><td>${f.tc[0]} à ${f.tc[1]}</td><td>${f.reg.length===7?'toutes':f.reg.length===6?'R2 à R7':f.reg.join(', ')}</td><td>PPF${f.ppf[0]} à ${f.ppf[1]}</td></tr>`).join('')}</tbody></table></div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Matériaux de référence (Fasc. 2)</h3><div class="tbl"><table><thead><tr><th>Matériau</th><th>Nature</th><th>E (MPa)</th><th>ν</th><th>k</th><th>ε6 / b / SN / kθ / kc</th></tr></thead><tbody>${matRows}</tbody></table></div>
+    <p class="hint">Bitumineux : E à 32 °C et 20 Hz. Améliorés Q1 et non traités : module par sous-couches de 25 cm, E = min(k·E inférieur ; Emax). Améliorés Q2 : E = 1 000 MPa. Épaisseurs usuelles : GB 8 à 16 cm, EME2 7 à 15 cm.</p></div>
+  <div class="card"><h3>Critères de dimensionnement (Fasc. 2, §9)</h3><div class="tbl"><table><thead><tr><th>Assise</th><th style="text-align:left">Critère sur la plateforme</th><th style="text-align:left">Couches bitumineuses</th></tr></thead><tbody>
+    <tr><td>Non traitée (F1 à F3)</td><td class="l">εz ≤ 0,020 · NE^−0,222</td><td class="l">εt de la couche de roulement si vérifiée</td></tr>
+    <tr><td>Améliorée au ciment (F4 à F7)</td><td class="l">1,20 · εz ≤ 0,020 · NE^−0,222 (ka = 1,20)</td><td class="l">idem</td></tr>
+    <tr><td>Bitumineuse (F8 à F17)</td><td class="l">εz ≤ A · NE^−0,222 ; A = 0,016 (TC1-2), 0,014 (TC3-4), 0,013 (TC5-6)</td><td class="l">εt,adm = ε6 (NE/10⁶)^b kθ kr ks kc</td></tr>
+  </tbody></table></div></div>`;
+}
+
+/* ======================================================================
+   NAVIGATION
+   ====================================================================== */
+$('form').addEventListener('submit', e => { e.preventDefault(); calculate(); });
+$('form').addEventListener('input', e => { if (!e.target.closest('#ppf-tool')) stale(); });
+$('reset').addEventListener('click', () => { $('form').reset(); $('p-region').value = 'R2'; lastFiche = null; $('o-out').textContent = ''; setRef(ref, true); loadUI(); calculate(); });
+$('results').addEventListener('click', e => { const a = e.target.closest('[data-action]'); if (a && a.dataset.action === 'copy'){ if (dirty) { toast('Relancer le calcul avant de copier.'); return; } copyNote(); } });
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => {
+  view = b.dataset.view;
+  document.querySelectorAll('[data-view]').forEach(x => x.classList.toggle('active', x === b));
+  $('results').hidden = view === 'valid' || view === 'ref'; $('validation').hidden = view !== 'valid'; $('refview').hidden = view !== 'ref';
+  $('scope').hidden = view === 'ref';
+  if (view === 'valid') { if (!$('validation').dataset.done) runValidation(); }
+  else if (view === 'ref') renderRef();
+  else if (last && !dirty) render();
+}));
+
+/* ======================================================================
+   VALIDATION
+   ====================================================================== */
+const STD = {q:0.662, a:0.125, d:0.375};
+const L4 = nuB => [{h:.05,E:2000,nu:nuB},{h:.15,E:1000,nu:.35},{h:.15,E:160,nu:.35},{E:80,nu:.35}];
+const LF1 = [{h:.05,E:2000,nu:.45},{h:.07,E:400,nu:.35},{h:.25,E:200,nu:.35},{E:80,nu:.35}];
+function alizeCase(title, lay, refs, defl){
+  return {group:'Alizé-LCPC', title, src:'Sorties de calcul Alizé-LCPC (captures d’écran)', run(){
+    const depths = refs.map(r => r.z);
+    const R = LEA.dualWheel(STD, lay, depths);
+    const out = [];
+    refs.forEach((r,k) => {
+      if (r.epsT !== undefined) out.push({q:`EpsT à z = ${r.zl}`, ref:r.epsT, val:-R[k].epsT, tol:1});
+      if (r.sigT !== undefined) out.push({q:`SigmaT à z = ${r.zl}`, ref:r.sigT, val:-R[k].sigT, tol:1});
+      if (r.epsZ !== undefined) out.push({q:`EpsZ à z = ${r.zl}`, ref:r.epsZ, val:R[k].epsZ, tol:1});
+    });
+    const y = 0.015; const W = LEA.circular(STD.q, STD.a, lay, [{r:0.1875,z:0},{r:Math.hypot(0.1875,y),z:0}], {mAlphaMax:200});
+    const dJ = 2*W[0].w, Rc = y*y/(2*(dJ - 2*W[1].w));
+    out.push({q:'Déflexion entre-jumelage (mm/100)', ref:defl.d, val:dJ*1e5, tol:1});
+    out.push({q:'Rayon de courbure (m)', ref:defl.R, val:Rc, tol:1.5});
+    return out;
+  }};
+}
+const SUITE = [
+  {group:'Solution exacte', title:'Boussinesq — massif homogène, charge circulaire (axe)', src:'Timoshenko & Goodier ; q = 0,70 MPa, a = 0,15 m, E = 100 MPa, ν = 0,35', run(){
+    const q=0.7,a=0.15,E=100,nu=0.35, zs=[0.05,0.1,0.2,0.4,0.8];
+    const R = LEA.circular(q,a,[{E,nu}], zs.map(z=>({r:0,z})).concat([{r:0,z:0}]), {mAlphaMax:400});
+    const out = [];
+    zs.forEach((z,k) => { const s=Math.hypot(a,z);
+      out.push({q:`σz à z = ${z} m (MPa)`, ref:q*(1-z**3/s**3), val:R[k].sz, tol:0.5});
+      out.push({q:`σr à z = ${z} m (MPa)`, ref:q/2*(1+2*nu-2*(1+nu)*z/s+z**3/s**3), val:R[k].sr, tol:0.5});
+      out.push({q:`εz à z = ${z} m (µdéf)`, ref:(1+nu)*q/E*(1-2*nu+2*nu*z/s-z**3/s**3)*1e6, val:R[k].ez*1e6, tol:0.5}); });
+    out.push({q:'Déflexion au centre en surface (mm)', ref:2*(1-nu*nu)*q*a/E*1e3, val:R[5].w*1e3, tol:0.5});
+    return out; }},
+  {group:'KENLAYER (Huang)', title:'Tricouche collé — axe de la charge', src:'Huang (2004), programme KENPAVE/KENLAYER : q = 100 psi, a = 5,99 in, h = 6 et 10 in, E = 500 / 40 / 10 ksi, ν = 0,35 / 0,40 / 0,45 (unités US conservées)', run(){
+    const K = [[1,0.02247,95.838,156.984,-0.0000281,0.000137],[3,0.02239,67.411,25.997,0.00009843,-0.00001339],[5,0.0221,32.784,-96.245,0.0002003,-0.0001481],[8,0.02079,17.91,-1.738,0.0004825,-0.0002052],[12,0.01916,9.656,-5.779,0.000357,-0.0001833],[20,0.01585,4.456,0.295,0.000419,-0.0001843],[29,0.01283,2.844,0.156,0.0002703,-0.0001194]];
+    const lay=[{h:6,E:500000,nu:.35},{h:10,E:40000,nu:.4},{E:10000,nu:.45}];
+    const R = LEA.circular(100,5.99,lay,K.map(r=>({r:0,z:r[0]})),{mAlphaMax:400});
+    const out=[]; K.forEach((r,k)=>{ const o=R[k];
+      out.push({q:`w à z = ${r[0]} in (in)`, ref:r[1], val:o.w, tol:0.5});
+      out.push({q:`σz à z = ${r[0]} in (psi)`, ref:r[2], val:o.sz, tol:0.5});
+      if (Math.abs(r[3])>1) out.push({q:`σr à z = ${r[0]} in (psi)`, ref:r[3], val:o.sr, tol:0.5});
+      out.push({q:`εz à z = ${r[0]} in (µdéf)`, ref:r[4]*1e6, val:o.ez*1e6, tol:0.5});
+      out.push({q:`εr à z = ${r[0]} in (µdéf)`, ref:r[5]*1e6, val:o.er*1e6, tol:0.5}); });
+    return out; }},
+  alizeCase('Alizé cas A — 5 cm BB (E 2 000, ν 0,45) + 7 et 25 cm GNT (400 / 200) sur plateforme 80 MPa', LF1, [
+    {z:0.05-1e-6, zl:'0,050 m (base BBSG3)', epsT:-285.6, sigT:-0.566, epsZ:500.8},
+    {z:0.12-1e-6, zl:'0,120 m', epsT:-572.4, sigT:-0.165, epsZ:994.6},
+    {z:0.37+1e-6, zl:'0,370 m (sommet plateforme)', epsT:-440.2, epsZ:971.6}], {d:81.4, R:76.5}),
+  alizeCase('Alizé cas B — 5 cm BB (E 2 000, ν 0,45) + 15 cm MTLH (1 000) + 15 cm GNT (160) sur plateforme 80 MPa', L4(0.45), [
+    {z:0.05-1e-6, zl:'0,050 m (base BBSG3)', epsT:-43.1, epsZ:135.3},
+    {z:0.2-1e-6, zl:'0,200 m (base GLa2)', epsT:-380.1, sigT:-0.463, epsZ:409.4},
+    {z:0.2+1e-6, zl:'0,200 m (sommet GLn)', epsZ:800.0},
+    {z:0.35-1e-6, zl:'0,350 m (base GLn)', epsT:-350.1, epsZ:557.5},
+    {z:0.35+1e-6, zl:'0,350 m (sommet plateforme)', epsZ:806.0}], {d:69.0, R:156.9}),
+  alizeCase('Alizé cas C — cas B avec ν BB = 0,35', L4(0.35), [
+    {z:0.05-1e-6, zl:'0,050 m (base BBSG3)', epsT:-21.8, epsZ:193.8},
+    {z:0.2-1e-6, zl:'0,200 m (base GLa2)', epsT:-384.3, sigT:-0.468, epsZ:416.3},
+    {z:0.35+1e-6, zl:'0,350 m (sommet plateforme)', epsZ:822.4}], {d:70.2, R:149.3}),
+  {group:'Alizé-LCPC (littérature)', title:'Manuel d’utilisation Alizé-LCPC — exemple de calcul direct, structure semi-rigide à 5 couches', src:'LCPC / itech, Manuel d’utilisation Alizé-LCPC Routes v1.2 et v1.5, figure 7.4 : BBSG 4 cm (E 5 400, ν 0,35) / GC 19 cm (E 35 000, ν 0,25) / GC 18 cm (E 20 000, ν 0,25) / GNT 35 cm (E 150) / sol (E 50) ; interface glissante entre les deux couches de GC, les autres collées ; jumelage 65 kN. Valeurs de sortie publiées dans le manuel. Le rayon de courbure publié (3 075,6 m) n’est pas retrouvé (2 756 m ici, écart 10 %) : sur une structure aussi rigide, la courbure se joue sur 0,04 µm de différence de flèche ; la valeur est donnée à titre indicatif et n’entre dans aucun critère.', run(){
+    const lay=[{h:.04,E:5400,nu:.35},{h:.19,E:35000,nu:.25,bonded:false},{h:.18,E:20000,nu:.25},{h:.35,E:150,nu:.35},{E:50,nu:.35}];
+    const refs=[{z:.04-1e-6,zl:'0,040 m',epsT:19.3,sigT:0.187,epsZ:50.4,sigZ:0.640},{z:.23-1e-6,zl:'0,230 m (base GC sup.)',epsT:-31.4,sigT:-1.342,epsZ:21.2,sigZ:0.128},{z:.41-1e-6,zl:'0,410 m (base GC inf.)',epsT:-25.6,sigT:-0.646,epsZ:15.6,sigZ:0.014},{z:.76-1e-6,zl:'0,760 m (base GNT)',epsT:-46.6,sigT:-0.006,epsZ:81.9,sigZ:0.008}];
+    const R=LEA.dualWheel(STD,lay,refs.map(r=>r.z)); const out=[];
+    refs.forEach((r,k)=>{
+      out.push({q:`EpsT à z = ${r.zl} (µdéf)`, ref:r.epsT, val:-R[k].epsT, tol:1});
+      if (Math.abs(r.sigT)>0.05) out.push({q:`SigmaT à z = ${r.zl} (MPa)`, ref:r.sigT, val:-R[k].sigT, tol:1});
+      else out.push({q:`SigmaT à z = ${r.zl} (MPa)`, ref:r.sigT, val:-R[k].sigT, tol:null, abs:0.001});
+      out.push({q:`EpsZ à z = ${r.zl} (µdéf)`, ref:r.epsZ, val:R[k].epsZ, tol:1});
+      if (r.sigZ>0.05) out.push({q:`SigmaZ à z = ${r.zl} (MPa)`, ref:r.sigZ, val:R[k].sigZ, tol:1});
+      else out.push({q:`SigmaZ à z = ${r.zl} (MPa)`, ref:r.sigZ, val:R[k].sigZ, tol:null, abs:0.001});
+    });
+    const y=0.015, W=LEA.circular(STD.q,STD.a,lay,[{r:0.1875,z:0},{r:Math.hypot(0.1875,y),z:0}],{mAlphaMax:200});
+    out.push({q:'Déflexion entre-jumelage (mm/100)', ref:36.2, val:2*W[0].w*1e5, tol:1});
+    out.push({q:'Rayon de courbure (m) — indicatif', ref:3075.6, val:y*y/(2*(2*W[0].w-2*W[1].w)), tol:null, info:true});
+    return out; }},
+  {group:'BISAR 3.0 (Shell)', title:'Manuel BISAR 3.0 — exemple du « Block Report », jumelage 2 × 20 kN', src:'Shell Bitumen, BISAR 3.0 User Manual (1998) : 30 cm E 5 000 / 20 cm E 1 000 / 15 cm E 800 / sol E 200, ν 0,35 partout, collage total ; roues de 20 kN, rayon 0,105 m, entraxe 0,315 m ; point entre les roues. Conventions BISAR : extension positive, compression négative.', run(){
+    const lay=[{h:.3,E:5000,nu:.35},{h:.2,E:1000,nu:.35},{h:.15,E:800,nu:.35},{E:200,nu:.35}];
+    const q=0.020/(Math.PI*0.105*0.105), s=0.1575;
+    const pts=[0.15,0.3-1e-7,0.65-1e-7,0.65+1e-7].map(z=>({r:s,z}));
+    const R=LEA.circular(q,0.105,lay,pts,{mAlphaMax:300}), o=R.map(x=>({exx:-2*x.et*1e6, eyy:-2*x.er*1e6, ezz:-2*x.ez*1e6, szz:-2*x.sz*1e3, uz:2*x.w*1e6}));
+    return [
+      {q:'z = 0,15 m : σzz (kPa)', ref:-129.0, val:o[0].szz, tol:0.5},
+      {q:'z = 0,15 m : εxx (µdéf)', ref:12.69, val:o[0].exx, tol:0.5},
+      {q:'z = 0,15 m : εyy (µdéf)', ref:-8.831, val:o[0].eyy, tol:0.5},
+      {q:'z = 0,15 m : εzz (µdéf)', ref:-18.15, val:o[0].ezz, tol:0.5},
+      {q:'z = 0,15 m : uz (µm)', ref:99.0, val:o[0].uz, tol:0.5},
+      {q:'z = 0,30 m, base couche 1 : εxx (µdéf)', ref:32.46, val:o[1].exx, tol:0.5},
+      {q:'z = 0,30 m, base couche 1 : εyy (µdéf)', ref:18.68, val:o[1].eyy, tol:0.5},
+      {q:'z = 0,30 m, base couche 1 : εzz (µdéf)', ref:-34.54, val:o[1].ezz, tol:0.5},
+      {q:'z = 0,30 m : uz (µm)', ref:95.16, val:o[1].uz, tol:0.5},
+      {q:'z = 0,65 m, base couche 3 : εzz (µdéf)', ref:-39.53, val:o[2].ezz, tol:0.5},
+      {q:'z = 0,65 m, sommet du sol : εxx (µdéf)', ref:28.49, val:o[3].exx, tol:0.5},
+      {q:'z = 0,65 m, sommet du sol : εyy (µdéf)', ref:25.72, val:o[3].eyy, tol:0.5},
+      {q:'z = 0,65 m, sommet du sol : εzz (µdéf)', ref:-70.54, val:o[3].ezz, tol:0.5},
+      {q:'z = 0,65 m : uz (µm)', ref:79.78, val:o[3].uz, tol:0.5},
+    ]; }},
+  {group:'Valeurs admissibles', title:'NF P 98-086 — comparaison aux valeurs calculées par Alizé-LCPC', src:'NE = 217 180 (MJA 20 PL/j/voie, 20 ans, 2 % arithmétique, CAM 1,25), risque 30 %', run(){
+    const NE = 217180;
+    const bb = LEA.epsTadm({eps6:100,b:-0.2,E10:7200,Eteq:2000,risk:0.3,SN:0.25,Sh:0.025,ks:1,kc:1.1,NE});
+    const ml = LEA.sigTadm({sig6:0.75,b:-1/15,risk:0.3,SN:1,Sh:0.03,kd:1,ks:1,kc:1.4,NE});
+    const tr = LEA.trafficNE({MJA:20,n:20,tau:0.02,mode:'arith',CAM:1.25});
+    return [
+      {q:'Trafic cumulé NPL (PL)', ref:173740, val:tr.NPL, tol:0.1},
+      {q:'kr BBSG3', ref:0.9180, val:bb.kr, tol:0.1},
+      {q:'εt,adm BBSG3 (µdéf)', ref:260.0, val:bb.value, tol:0.1},
+      {q:'kr GLa2', ref:0.8970, val:ml.kr, tol:0.1},
+      {q:'σt,adm GLa2 (MPa)', ref:1.043, val:ml.value, tol:0.1},
+      {q:'εz,adm plateforme, A = 20 000 (µdéf)', ref:1306.9, val:LEA.epsZadm({A:20000,exp:-0.222,NE}).value, tol:0.1},
+    ]; }},
+  {group:'Contrôle interne', title:'Interface glissante — respect des conditions aux limites', src:'3 couches (8 cm E 5 400 / 20 cm E 500 / sol E 50), interface glissante sous la couche 1 : cisaillement nul de part et d’autre, continuité de σz et de w', run(){
+    const lay=[{h:.08,E:5400,nu:.35,bonded:false},{h:.2,E:500,nu:.35},{E:50,nu:.35}];
+    const P=[]; for (const r of [0.05,0.15,0.3]) { P.push({r,z:0.08-1e-7},{r,z:0.08+1e-7}); }
+    const R=LEA.circular(0.662,0.125,lay,P,{mAlphaMax:300}); const out=[];
+    for (let k=0;k<P.length;k+=2){ const r=P[k].r;
+      out.push({q:`σz continu à r = ${r} m (MPa)`, ref:R[k].sz, val:R[k+1].sz, tol:0.1});
+      out.push({q:`w continu à r = ${r} m (mm)`, ref:R[k].w*1e3, val:R[k+1].w*1e3, tol:0.1});
+      out.push({q:`τrz / σz au-dessus, r = ${r} m`, ref:0, val:R[k].trz/Math.max(Math.abs(R[k].sz),1e-9), tol:null, abs:0.001}); }
+    return out; }},
+];
+
+// Contrôles du référentiel LBTP 2024 : cohérence des lois transcrites (calculs manuels indépendants)
+const LBTP_SUITE = [
+  {group:'LBTP 2024', title:'Fractiles u du tableau 12 (Fasc. 2) retrouvés par l’inverse de la loi normale', src:'Valeurs tabulées du manuel : TC1 30 %, TC2 25 %, TC3 15 %, TC4 10 %, TC5-TC6 5 %.', run(){
+    return [[0.30,-0.524],[0.25,-0.674],[0.15,-1.036],[0.10,-1.282],[0.05,-1.645]].map(([r,u]) => ({q:`u pour r = ${F(r*100,0)} %`, ref:u, val:LEA.normInv(r), tol:0.1}));
+  }},
+  {group:'LBTP 2024', title:'Classement du trafic, portance, Sh, ks et durée', src:'Bornes des classes TC et PPF, loi Sh(h), coefficient ks et règle de durée (Fasc. 2 et 3).', run(){
+    const o = [];
+    [[0.15e6,'TC1⁻'],[0.2e6,'TC1⁻'],[0.21e6,'TC1⁺'],[3e6,'TC3⁺'],[12e6,'TC5⁻'],[40e6,'TC6⁺']].forEach(([ne,c]) => o.push({q:`NE = ${F(ne,0)} → ${c}`, ref:1, val: tcClass(ne).name === c ? 1 : 0, tol:0}));
+    [[60,'PPF2'],[80,'PPF3'],[150,'PPF4'],[250,'PPF5']].forEach(([E,c]) => o.push({q:`E = ${E} MPa → ${c}`, ref:1, val: ppfClass(E).name === c ? 1 : 0, tol:0}));
+    [[0.08,0.010],[0.12,0.016],[0.20,0.025]].forEach(([h,s]) => o.push({q:`Sh pour h = ${F(h*100,0)} cm (m)`, ref:s, val:shLBTP(h), tol:0.01}));
+    [[45,1/1.2],[70,1/1.1],[100,1/1.065],[150,1]].forEach(([E,k]) => o.push({q:`ks pour E = ${E} MPa`, ref:k, val:ksLBTP(E), tol:0.01}));
+    o.push({q:'Durée : RN à 250 PL/j/sens (ans)', ref:20, val:durationLBTP('rn',250), tol:0});
+    o.push({q:'Durée : RN à 150 PL/j/sens (ans)', ref:15, val:durationLBTP('rn',150), tol:0});
+    return o;
+  }},
+  {group:'LBTP 2024', title:'Valeurs admissibles — calcul manuel indépendant', src:'GB3 12 cm, TC3⁺ (NE 4 × 10⁶, r 15 %), PPF3 (E 100 MPa) ; EME2 14 cm, TC5⁺ (NE 25 × 10⁶, r 5 %), PPF4 ; εz selon la famille d’assise. Références calculées à part (tableur).', run(){
+    const gb = epsTadmLBTP(MAT.GB3.crit, 4e6, 0.15, 0.12, 100), eme = epsTadmLBTP(MAT.EME2.crit, 25e6, 0.05, 0.14, 150);
+    return [
+      {q:'kr GB3', ref:0.79616, val:gb.kr, tol:0.05},
+      {q:'εt,adm GB3 (µdéf)', ref:124.644, val:gb.value, tol:0.05},
+      {q:'kr EME2', ref:0.74865, val:eme.kr, tol:0.05},
+      {q:'εt,adm EME2 (µdéf)', ref:72.686, val:eme.value, tol:0.05},
+      {q:'εz,adm assise non traitée, NE 1,5 × 10⁶ (µdéf)', ref:851.02, val:epsZrule('nt',2).A*Math.pow(1.5e6,-0.222), tol:0.05},
+      {q:'εz,adm assise bitumineuse, TC4, NE 4 × 10⁶ (µdéf)', ref:479.15, val:epsZrule('bitumineuse',4).A*Math.pow(4e6,-0.222), tol:0.05},
+      {q:'ka assise améliorée au ciment', ref:1.20, val:epsZrule('ameliore',3).ka, tol:0},
+      {q:'ka assise non traitée', ref:1.00, val:epsZrule('nt',3).ka, tol:0},
+    ];
+  }},
+  {group:'LBTP 2024', title:'Modules des non traités et module équivalent de plateforme', src:'GNT de 50 cm (k 2,5, Emax 400) sur plateforme de 50 MPa : deux sous-couches, 125 et 312,5 MPa. Bicouche de même module : le module équivalent doit redonner ce module (contrôle du solveur).', run(){
+    const save = layers, sref = ref; ref = 'lbtp';
+    layers = [layerFromMat('GNT',50,'GNT'), layerFromMat('PF',undefined,'PF')]; layers[1].E = 50;
+    const d = discretize(layers); layers = save; ref = sref;
+    return [
+      {q:'Nombre de sous-couches', ref:2, val:d.parts[0].Es.length, tol:0},
+      {q:'E sous-couche inférieure (MPa)', ref:125, val:d.parts[0].Es[1], tol:0.01},
+      {q:'E sous-couche supérieure (MPa)', ref:312.5, val:d.parts[0].Es[0], tol:0.01},
+      {q:'Module équivalent, bicouche 100 / 100 MPa', ref:100, val:eqModulus(100,0.4,100), tol:0.5},
+    ];
+  }},
+];
+function runValidation(){
+  const box = $('validation');
+  box.innerHTML = '<div class="card"><div class="val-sum"><h3 style="margin:0">Validation du solveur</h3><span class="badge warn">Calcul en cours…</span></div></div>';
+  setTimeout(() => {
+    let n = 0, ok = 0, html = '';
+    [...SUITE, ...LBTP_SUITE].forEach(t => {
+      let rows; try { rows = t.run(); } catch (e) { rows = [{q:'Erreur : '+e.message, ref:NaN, val:NaN, tol:0}]; }
+      html += `<div class="card"><div class="reshead" style="margin-bottom:6px"><h3 style="margin:0">${t.title}</h3><span class="badge">${t.group}</span></div><p class="hint" style="margin-top:0">${t.src}</p><div class="tbl"><table><thead><tr><th>Grandeur</th><th>Référence</th><th>Calcul</th><th>Écart</th><th>Tolérance</th><th>Statut</th></tr></thead><tbody>`;
+      rows.forEach(r => {
+        let err, pass, tol;
+        if (r.info){ err = Math.abs(r.val - r.ref)/Math.abs(r.ref)*100; pass = null; tol = 'indicatif'; }
+        else if (r.abs !== undefined){ err = Math.abs(r.val - r.ref); pass = err <= r.abs; tol = '± ' + r.abs; }
+        else { err = Math.abs(r.val - r.ref)/Math.max(Math.abs(r.ref),1e-12)*100; pass = err <= r.tol + 1e-9; tol = r.tol + ' %'; }
+        if (pass !== null) { n++; if (pass) ok++; }
+        const dec = Math.abs(r.ref) >= 100 ? 1 : Math.abs(r.ref) >= 1 ? 3 : 5;
+        html += `<tr><td>${r.q}</td><td>${F(r.ref,dec)}</td><td>${F(r.val,dec)}</td><td>${r.abs!==undefined && !r.info ? F(err,5) : F(err,2)+' %'}</td><td>${tol}</td><td><span class="badge ${pass===null?'warn':pass?'':'bad'}">${pass===null?'Indicatif':pass?'Conforme':'Écart'}</span></td></tr>`;
+      });
+      html += '</tbody></table></div></div>';
+    });
+    box.innerHTML = `<div class="card"><div class="val-sum"><h3 style="margin:0">Validation du solveur</h3><span class="badge ${ok===n?'':'bad'}" id="val-summary">${ok} / ${n} essais conformes</span><button type="button" class="link" id="val-run">Relancer les essais</button></div><p class="hint">Chaque essai compare le calcul de cette application à une solution exacte, aux exemples publiés des logiciels de référence (KENLAYER, BISAR 3.0, manuel Alizé-LCPC), à des sorties Alizé-LCPC de projets ou, pour le référentiel LBTP, à un calcul manuel indépendant. Les déflexions des fiches F1 à F17 seront ajoutées dès que les valeurs du manuel seront saisies.</p></div>` + html;
+    box.dataset.done = '1';
+    $('val-run').addEventListener('click', runValidation);
+  }, 30);
+}
+
+/* ---------------- démarrage ---------------- */
+setRef('lbtp', true); loadUI(); updateProject(); calculate();
+})();
+</script>
+</body>
+</html>
