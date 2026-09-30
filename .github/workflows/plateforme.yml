@@ -1,0 +1,25 @@
+name: Plateforme
+
+on:
+  push:
+    paths: ['plateforme/**', '.github/workflows/plateforme.yml']
+  pull_request:
+    paths: ['plateforme/**', '.github/workflows/plateforme.yml']
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plateforme
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plateforme-dist
+          path: plateforme/dist

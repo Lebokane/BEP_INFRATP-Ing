@@ -1,0 +1,11 @@
+{
+  "id": "__ID__",
+  "name": "__NAME__",
+  "category": "__CATEGORY__",
+  "version": "0.1.0",
+  "status": "alpha",
+  "summary": "Exemple : tirant d’eau normal d’un canal rectangulaire (Manning). Remplacer par la description du module.",
+  "methods": ["Manning"],
+  "references": ["À compléter"],
+  "tier": "standard"
+}

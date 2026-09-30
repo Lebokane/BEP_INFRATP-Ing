@@ -1,0 +1,11 @@
+{
+  "id": "debits-hydro",
+  "name": "Débits hydrologiques",
+  "category": "Hydrologie",
+  "version": "1.2.0",
+  "status": "stable",
+  "summary": "Débits de pointe des bassins versants : rationnelle, Caquot, ORSTOM classique et révisée, avec note de calcul.",
+  "methods": ["Rationnelle", "Caquot (IT 77)", "ORSTOM classique", "ORSTOM révisée (FAO 54)", "Kirpich", "Montana"],
+  "references": ["Rodier & Auvray, ORSTOM, 1965", "FAO, Bulletin d’irrigation et de drainage 54", "HEC-22, 2013"],
+  "tier": "standard"
+}

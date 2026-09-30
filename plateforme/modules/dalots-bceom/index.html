@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#234734">
+<title>{{BRAND.name}} · Dalots BCEOM</title>
+<meta name="description" content="Dimensionnement hydraulique de dalots rectangulaires selon la méthode BCEOM : propositions, vérification et débit capable.">
+<style>
+:root{--green:#54800e;--lime:#89b82d;--forest:#234734;--ink:#28362e;--muted:#65736a;--line:#dce4db;--bg:#f3f6f2;--amber:#946119}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Arial,sans-serif}
+button,input,select{font:inherit}
+button,summary{cursor:pointer}
+a{color:var(--green)}
+header{display:flex;align-items:center;justify-content:space-between;padding:19px max(28px,calc((100vw - 1470px)/2));background:#fff;border-bottom:1px solid var(--line);gap:18px}
+.identity{display:flex;align-items:center;gap:24px}
+.identity img{width:185px;height:auto;display:block}
+.appname{border-left:1px solid var(--line);padding-left:24px;font-size:21px;letter-spacing:1.5px;white-space:nowrap}
+.appname b{color:var(--green)}
+.appname span{display:block;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin-top:4px}
+.outline{background:#fff;border:1px solid #b4c5ad;padding:11px 16px;color:var(--forest);border-radius:5px;font-size:14px}
+main{max-width:1470px;padding:28px;margin:auto}
+.intro{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:4px 0 28px}
+.eyebrow{font-size:11px;letter-spacing:1.7px;color:var(--green);font-weight:700}
+h1{font-size:32px;letter-spacing:-.8px;margin:5px 0;font-weight:600}
+.intro p{margin:6px 0;color:var(--muted);font-size:15px}
+.method-chip{font-size:11px;letter-spacing:1px;border:1px solid #d2ddca;padding:12px 15px;border-radius:5px;white-space:nowrap}
+.method-chip span{display:block;letter-spacing:0;margin-top:5px;font-size:12px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:325px minmax(0,1fr);gap:24px;align-items:start}
+aside{background:#fff;border:1px solid var(--line);border-radius:7px}
+form{padding:21px}
+h2{font-size:19px;letter-spacing:-.3px;margin:0}
+h3{font-size:15px;margin:16px 0 10px}
+.form-title{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.form-title h2{font-size:17px}
+.link{border:0;padding:0;background:none;color:var(--green);font-size:12px}
+.group{border-top:1px solid var(--line);padding-top:4px;margin-top:22px}
+.group h3{font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
+label{display:block;margin:14px 0 6px;font-size:14px}
+label span{float:right;font-size:12px;color:var(--muted)}
+input[type=number],select{width:100%;height:43px;border:1px solid #cdd8c8;background:#fbfcfa;padding:9px 10px;border-radius:4px;color:var(--ink);min-width:0}
+input#Q{font-size:26px;color:var(--green);height:56px;font-weight:600}
+input:focus,select:focus{outline:2px solid #7ca45a;border-color:transparent;background:#fff}
+button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.hint{font-size:12px;color:var(--muted);line-height:1.65;margin:8px 0}
+.criteria{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+.criteria>summary{font-size:13px;font-weight:600}
+.primary{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--forest);color:#fff;border:0;border-radius:4px;padding:13px 15px;margin-top:22px;font-size:15px}
+.primary:hover{background:#355d43}
+.primary span{font-size:23px}
+.local{font-size:11px;text-align:center;color:var(--muted);margin:12px 0 0}
+.right{min-width:0}
+.right nav{display:flex;gap:9px;border-bottom:1px solid #cbd8c6;margin-bottom:17px}
+.right nav button{border:0;border-bottom:3px solid transparent;background:none;padding:13px 20px;color:var(--muted);display:flex;gap:12px;font-size:13px}
+.right nav button span{font-size:16px}
+.right nav button.active{border-bottom-color:var(--green);color:var(--green);font-weight:600}
+.scope{border:1px solid #dce5d7;border-left:3px solid var(--lime);background:#eef3e9;padding:10px 14px;font-size:12px;color:#506547;border-radius:3px;margin-bottom:20px}
+.reshead{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px}
+.reshead p{font-size:13px;color:var(--muted);margin:4px 0 0}
+.actions{display:flex;gap:14px;flex-shrink:0}
+.actions button{font-size:13px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);background:var(--forest);color:#fff;border-radius:7px;padding:23px 0;margin-bottom:20px}
+.strip>div{padding:0 24px;border-right:1px solid #597560}
+.strip>div:last-child{border:0}
+.strip small{font-size:11px;letter-spacing:.6px;color:#c8d9bd;display:block;margin-bottom:8px}
+.strip strong{font-size:30px;font-weight:500;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.strip em{font-size:13px;font-style:normal;color:#c8d9bd;margin-left:5px}
+.strip p{font-size:11px;color:#d0dfc7;margin:4px 0 0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:white;border:1px solid var(--line);border-radius:7px;padding:19px;min-width:0}
+.card.selected{border-color:#739f35;box-shadow:inset 0 3px #739f35}
+.cardtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cardtop h3{margin:0;font-size:16px}
+.badge{font-size:11px;padding:3px 7px;border-radius:3px;background:#eff5e6;color:#4b701e;white-space:nowrap}
+.badge.warn{background:#fff2dc;color:#865917}
+.badge.bad{background:#fcece8;color:#a7402a}
+.dim{font-size:25px;font-weight:600;letter-spacing:-.6px;margin-top:14px}
+.dim small{font-size:13px;letter-spacing:0;font-weight:400;color:var(--muted)}
+.sketch{width:100%;height:108px;display:block;margin:4px 0}
+.mini{border-top:1px solid var(--line);padding-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mini small{display:block;font-size:11px;color:var(--muted)}
+.mini b{font-size:17px;font-weight:600}
+.mini em{font-size:11px;color:var(--muted);font-style:normal}
+.pick{width:100%;margin-top:15px;padding:9px;border:1px solid var(--line);border-radius:4px;background:#f7f9f4;color:var(--forest);font-size:13px}
+.alt{margin-top:10px}
+.alt summary{font-size:12px;color:var(--muted)}
+.alt button{display:block;border:0;background:none;color:var(--green);font-size:13px;margin:8px 0 0;padding:0}
+.empty{padding:24px 0;font-size:14px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);margin-bottom:10px}
+.detail{border:1px solid var(--line);border-radius:7px;background:#fff;margin-top:20px;overflow:hidden}
+.dhead{border-bottom:1px solid var(--line);padding:18px 22px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.dhead p{font-size:13px;color:var(--muted);margin:3px 0 0}
+.dbody{padding:22px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:9px 6px;border-bottom:1px solid #e8eee3;text-align:left;font-weight:400}
+th{font-size:12px;color:var(--muted);background:#f8faf5}
+.values td:first-child{padding-left:0}
+.values td:last-child{text-align:right;font-variant-numeric:tabular-nums;padding-right:0}
+.chart{width:100%;height:auto;display:block;border:1px solid #e1e8dc;border-radius:4px;background:#fcfdfb}
+.chartlegend{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0;font-size:12px;color:var(--muted)}
+.chartlegend span:before{content:'';width:16px;height:3px;background:var(--green);display:inline-block;vertical-align:middle;margin-right:6px}
+.chartlegend .amber:before{background:#b78b3f}
+.subhead{font-size:11px;color:var(--muted);letter-spacing:.6px;margin-top:20px;text-transform:uppercase}
+.note{background:#fff7e8;border-left:3px solid #c99943;padding:12px 15px;margin-top:16px;font-size:13px;line-height:1.65;color:#745a2f}
+.note ul{padding-left:18px;margin:6px 0}
+.note li{margin:4px 0}
+.note.neutral{background:#f0f5ec;border-color:#95b56d;color:#4e663f}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.check{padding:9px 12px;border:1px solid #dce7d2;border-radius:4px;background:#f7faf2;font-size:12px;color:#4e6a35}
+.check.bad{border-color:#e9cec0;background:#fff5f0;color:#a55731}
+.calcsteps{margin-top:17px}
+.calcsteps summary{font-size:13px;font-weight:600}
+.method{border:1px solid var(--line);border-radius:7px;background:#fff;margin-top:28px}
+.method>summary{display:flex;justify-content:space-between;padding:20px 23px;list-style:none;font-size:15px;font-weight:600}
+.methodbody{padding:0 23px 23px;font-size:14px;line-height:1.75}
+.methodbody h2{margin:10px 0}
+.methodbody h3{margin:18px 0 6px;font-size:15px}
+.methodbody .formula{background:#f6f8f3;border-left:3px solid #89b82d;padding:9px 13px;margin:8px 0;font-family:Georgia,serif;font-size:14px}
+.methodbody td:nth-child(2){min-width:240px}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:24px;color:var(--muted);font-size:12px}
+#toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--forest);color:white;padding:12px 20px;border-radius:5px;font-size:14px;z-index:30}
+#error{background:#fff0e9;color:#a54b27;padding:10px;font-size:13px}
+.stale-msg{background:#fff1d8;color:#886229;padding:12px 15px;border:1px solid #e8d6b2;border-radius:4px;margin-bottom:15px;font-size:14px}
+.stale{opacity:.45}
+.printonly{display:none}
+[hidden]{display:none!important}
+@media(max-width:1100px){.workspace{grid-template-columns:300px minmax(0,1fr);gap:18px}.dgrid{grid-template-columns:1fr}.strip>div{padding:0 16px}.strip strong{font-size:25px}.method-chip{display:none}}
+@media(max-width:850px){.cards{grid-template-columns:1fr}.right nav button{padding:13px 10px}.identity img{width:150px}.appname{font-size:19px}}
+@media(max-width:700px){header{padding:14px 16px;gap:10px}.identity{gap:12px}.identity img{width:119px}.appname{padding-left:12px;font-size:15px;letter-spacing:.4px}.appname span{font-size:8px;letter-spacing:.3px}.outline{font-size:11px;padding:8px;max-width:106px}main{padding:22px 16px}.intro{margin-bottom:20px}h1{font-size:27px;line-height:1.25}.intro p{font-size:14px}.workspace{grid-template-columns:1fr;gap:22px}.right nav button{flex:1;justify-content:center;padding:12px 6px;gap:7px}.right nav button span{font-size:14px}.cards{grid-template-columns:1fr 1fr;gap:10px}.card{padding:13px}.cardtop{flex-wrap:wrap}.cardtop h3{font-size:14px}.dim{font-size:21px}.mini{grid-template-columns:1fr;gap:6px}.mini>div{display:flex;gap:5px;align-items:center}.mini small{flex:1}.mini b{font-size:15px}.sketch{height:95px}.strip>div{padding:0 12px}.strip strong{font-size:24px}.strip small{font-size:10px}.strip em{font-size:11px}.reshead{align-items:flex-start}.reshead h2{font-size:18px}.actions{gap:8px}.dbody{padding:16px}.dhead{padding:16px}.dhead h2{font-size:17px}footer{flex-direction:column}.method>summary{font-size:14px;padding:17px}.methodbody{padding:0 17px 17px}.right{scroll-margin-top:15px}}
+@media(max-width:370px){.cards{grid-template-columns:1fr}.appname{display:none}}
+@media print{body{background:white;font-size:11px}header,.intro,aside,nav,.scope,.actions,.pick,.alt,.method,.no-print,#toast{display:none!important}main{padding:0}.workspace{display:block}.printonly{display:block;margin-bottom:18px}.printonly img{width:165px;height:auto}.printonly h1{font-size:23px;margin:8px 0}.printonly p{font-size:11px}.strip{background:white;color:var(--ink);border:1px solid #ddd}.strip small,.strip p,.strip em{color:#65736a}.strip strong{font-size:24px}.cards{grid-template-columns:1fr 1fr}.card,.detail,.chart,.note{break-inside:avoid}.dbody{padding:16px}.dgrid{grid-template-columns:1fr 1fr;gap:16px}td,th{font-size:10px;padding:6px}.note{font-size:10px}.detail .dhead{display:block}.stale,.stale-msg{display:none}.sketch{height:85px}.printonly .print-source{font-size:9px}footer{font-size:10px;border-top:1px solid #ccc;padding-top:10px}@page{size:A4;margin:12mm}}
+</style>
+</head>
+<body>
+<header>
+  <div class="identity">
+    <img src="{{BRAND.logo}}" alt="{{BRAND.logoAlt}}">
+    <div class="appname">DALOTS <b>BCEOM</b><span>HYDRAULIQUE ROUTIÈRE</span></div>
+  </div>
+  <button id="portable" class="outline">↓ Version hors connexion</button>
+</header>
+<main>
+  <div class="intro">
+    <div>
+      <span class="eyebrow">{{BRAND.eyebrow}}</span>
+      <h1>Dimensionner. Vérifier. Comparer.</h1>
+      <p>Méthode BCEOM pour dalots rectangulaires, applicable à tout projet.</p>
+    </div>
+    <div class="method-chip">MÉTHODE BCEOM<span>g = 9,8 · Ks = 67 par défaut</span></div>
+  </div>
+
+  <div class="workspace">
+    <aside>
+      <form id="form">
+        <div class="form-title">
+          <h2>Données de calcul</h2>
+          <button type="button" id="reset" class="link">Réinitialiser</button>
+        </div>
+
+        <div class="group">
+          <h3>01 / Débit &amp; section</h3>
+          <div id="qwrap">
+            <label for="Q">Débit total Q <span>m³/s</span></label>
+            <input id="Q" type="number" value="15" min="0.00001" max="1000000" step="any" required>
+          </div>
+          <div id="geometry">
+            <div class="two">
+              <div>
+                <label for="B">Largeur B <span>m</span></label>
+                <input id="B" type="number" value="3" min="0.1" max="30" step="any" required>
+              </div>
+              <div>
+                <label for="D">Hauteur D <span>m</span></label>
+                <input id="D" type="number" value="2" min="0.1" max="20" step="any" required>
+              </div>
+            </div>
+            <label for="N">Cellules identiques</label>
+            <select id="N"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+          </div>
+          <p class="hint">Dimensions intérieures utiles. Partage égal du débit : q = Q / N.</p>
+        </div>
+
+        <div class="group">
+          <h3>02 / Hypothèse de pente</h3>
+          <label for="slopeMode">Pente utilisée pour y et V</label>
+          <select id="slopeMode">
+            <option value="critical">Ic calculée · hypothèse BCEOM</option>
+            <option value="fixed">Pente réelle imposée</option>
+          </select>
+          <div id="slopewrap" hidden>
+            <label for="slope">Pente du radier I <span>%</span></label>
+            <input id="slope" type="number" value="0.7" min="0.00001" max="20" step="any" required>
+          </div>
+          <p class="hint" id="slopehint">La pente critique est recalculée pour chaque section et chaque débit. Ce mode ne vérifie pas une pente réelle construite.</p>
+          <div class="two">
+            <div>
+              <label for="Ks">Strickler Ks <span>m⅓/s</span></label>
+              <input id="Ks" type="number" value="67" min="10" max="150" step="any" required>
+            </div>
+            <div>
+              <label for="g">Pesanteur g <span>m/s²</span></label>
+              <input id="g" type="number" value="9.8" min="9" max="10" step="any" required>
+            </div>
+          </div>
+          <p class="hint">Ks caractérise la rugosité du radier. N est le nombre de cellules.</p>
+        </div>
+
+        <details class="criteria" open>
+          <summary>03 / Critères de sélection</summary>
+          <div class="two">
+            <div>
+              <label for="hlimit">H₁ / D maximal</label>
+              <input id="hlimit" type="number" value="1.25" min="0.07" max="1.25" step="any" required>
+            </div>
+            <div>
+              <label for="vmax">Vitesse max. <span>m/s</span></label>
+              <input id="vmax" type="number" value="4" min="0.01" max="30" step="any" required>
+            </div>
+          </div>
+          <label for="fill">Remplissage maximal y / D <span>%</span></label>
+          <input id="fill" type="number" value="80" min="10" max="100" step="any" required>
+          <p class="hint">H₁/D = 1,25 et V = 4 m/s sont des seuils indicatifs BCEOM. Le critère de remplissage à 80 % est un ajout modifiable de l’application.</p>
+          <div id="catalog">
+            <div class="two">
+              <div>
+                <label for="Bmax">B maximal <span>m</span></label>
+                <input id="Bmax" type="number" value="6" min="1" max="10" step="any" required>
+              </div>
+              <div>
+                <label for="Dmax">D maximal <span>m</span></label>
+                <input id="Dmax" type="number" value="5" min="1" max="10" step="any" required>
+              </div>
+            </div>
+            <label for="step">Pas du catalogue <span>m</span></label>
+            <select id="step">
+              <option value="0.25">0,25</option>
+              <option value="0.5" selected>0,50</option>
+              <option value="1">1,00</option>
+            </select>
+            <p class="hint">Catalogue de recherche : B et D dès 1 m. Aucune valeur n’est normative.</p>
+          </div>
+        </details>
+
+        <p id="error" role="alert" hidden></p>
+        <button class="primary" id="run" type="submit">Rechercher les sections <span>↗</span></button>
+        <p class="local">Fonctionne entièrement sur votre appareil.</p>
+      </form>
+    </aside>
+
+    <section class="right">
+      <nav aria-label="Mode de calcul">
+        <button data-mode="propose" class="active">01 <span>Proposer</span></button>
+        <button data-mode="verify">02 <span>Vérifier</span></button>
+        <button data-mode="capacity">03 <span>Débit capable</span></button>
+      </nav>
+      <div class="scope"><b>Hypothèse : sortie aval libre.</b> Les effets du niveau aval, les remous et la surverse ne sont pas calculés.</div>
+      <div id="results" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <details id="method" class="method">
+    <summary>Méthode de calcul, hypothèses et limites <span>+</span></summary>
+    <div class="methodbody">
+      <h2>Équations de l’hydraulique routière BCEOM</h2>
+      <p>L’outil résout les équations du manuel <em>Hydraulique Routière</em> (Nguyen Van Tuu, BCEOM, 1981) pour les dalots rectangulaires à sortie libre, en régime permanent, avec partage égal du débit entre cellules identiques.</p>
+
+      <h3>Débit réduit en amont</h3>
+      <p>Chaque cellule reçoit le débit q = Q / N. Le débit réduit caractérise la charge hydraulique à l’entrée :</p>
+      <div class="formula">Q*H₁ = q / ( B · D · √(2gD) )</div>
+
+      <h3>Hauteur d’eau amont</h3>
+      <p>Le rapport H₁/D est obtenu par <b>numérisation de l’abaque BCEOM</b> (figure 77 du manuel), sous la forme d’un polynôme de degré 6 ajusté sur le domaine d’emploi :</p>
+      <div class="formula">H₁/D = −2,6213·z⁶ + 12,192·z⁵ − 23,291·z⁴ + 23,261·z³ − 10,876·z² + 4,3291·z + 0,0631</div>
+      <p>où z = Q*H₁. La hauteur réelle est ensuite H₁ = (H₁/D) · D.</p>
+
+      <h3>Pente critique</h3>
+      <p>Le débit réduit critique est calculé pour chaque section et chaque débit :</p>
+      <div class="formula">Q*Ic = q / √( g · B⁵ )</div>
+      <p>La pente critique réduite est obtenue analytiquement :</p>
+      <div class="formula">Ic* = (Q*Ic)^(2/3) · [ 2 + (1/Q*Ic)^(2/3) ]^(4/3)</div>
+      <p>La pente critique réelle vaut :</p>
+      <div class="formula">Ic = Ic* · g / ( Ks² · B^(1/3) )</div>
+
+      <h3>Vitesse et tirant d’eau uniformes</h3>
+      <p>Le débit réduit vitesse est :</p>
+      <div class="formula">Q*V = q / ( Ks · √I · B^(8/3) )</div>
+      <p>Le rapport X = y/B est solution de l’équation de Manning réduite :</p>
+      <div class="formula">X^(5/3) / ( 1 + 2X )^(2/3) = Q*V</div>
+      <p>résolue par dichotomie. La vitesse réduite vaut V* = [ X / (1 + 2X) ]^(2/3), puis :</p>
+      <div class="formula">V = V* · Ks · √I · B^(2/3) , &nbsp;&nbsp; y = X · B</div>
+
+      <h3>Hypothèses et limites</h3>
+      <p>Présélection à écoulement permanent, cellules rectangulaires identiques, répartition égale du débit, sortie aval libre. Le polynôme H₁/D est une numérisation de l’abaque BCEOM : sa précision n’est garantie qu’à l’intérieur du domaine d’emploi de la figure 77 (0,19 ≤ Q*H₁ ≤ 0,44 environ). Toute valeur hors de ce domaine est signalée comme extrapolation.</p>
+      <p>À vérifier au projet : niveau aval et remous, pente construite, conditions d’entrée, crue de vérification, revanche sous chaussée, affouillement, embâcles, dépôts, dissipation d’énergie et dimensionnement structurel. Le pourcentage y/D ne représente pas une revanche sous chaussée.</p>
+      <div class="note">Cet outil est un outil de présélection. Il ne remplace pas un calcul de ligne d’eau ni une vérification par un modèle numérique de référence.</div>
+    </div>
+  </details>
+
+  <footer>
+    <span>{{BRAND.fullName}}</span>
+    {{CREDIT_HTML}}
+    <span>BCEOM · Version {{MODULE.version}}</span>
+  </footer>
+</main>
+<div id="toast" role="status"></div>
+
+<script src="engine.js"></script>
+
+<script>
+'use strict';
+const E=window.BCEOM, $=id=>document.getElementById(id),
+      F=(x,d=2)=>x===null||!Number.isFinite(x)?'—':x.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const names={head:'Hauteur amont H₁/D',fill:'Remplissage y/D',velocity:'Vitesse maximale',slope:'Domaine I ≥ Ic'};
+let mode='propose',last=null,selected=null,groups=[],cap=null,dirty=false;
+const fields=['Q','B','D','N','Ks','g','hlimit','fill','vmax','Bmax','Dmax','step'];
+
+function read(){
+  let p={};
+  fields.forEach(k=>p[k]=Number($(k).value));
+  p.slope=Number($('slope').value)/100;
+  p.slopeMode=$('slopeMode').value;
+  return p;
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const dims=r=>`${r.N} × ${F(r.B,2)} × ${F(r.D,2)} m`;
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',4000);}
+
+function sketch(r){
+  const W=380,gap=8,maxH=59,bwmax=(W-70-(r.N-1)*gap)/r.N,
+        s=Math.min(bwmax/r.B,maxH/r.D),
+        bw=r.B*s,bh=r.D*s,x0=(W-r.N*bw-(r.N-1)*gap)/2,top=14;
+  let body='';
+  for(let i=0;i<r.N;i++){
+    let x=x0+i*(bw+gap), water=Math.min(r.y/r.D,1)*(bh-6);
+    body+=`<rect x="${x}" y="${top}" width="${bw}" height="${bh}" fill="#f8faf4" stroke="#7c8b75" stroke-width="6"/>`;
+    body+=`<rect x="${x+3}" y="${top+bh-3-water}" width="${Math.max(0,bw-6)}" height="${water}" fill="#7ebdc9" opacity=".65"/>`;
+    body+=`<path d="M${x+3},${top+bh-3-water}h${Math.max(0,bw-6)}" stroke="#338b9f" stroke-width="1.5"/>`;
+  }
+  return `<svg class="sketch" viewBox="0 0 380 108" role="img" aria-label="${r.N} cellules de ${r.B} mètres par ${r.D} mètres ; tirant uniforme théorique ${F(r.y)} mètres.">${body}<path d="M${x0},${top+bh+13}h${bw}m0,-4v8M${x0},${top+bh+9}v8" fill="none" stroke="#8a9782"/><text x="${x0+bw/2}" y="${top+bh+31}" text-anchor="middle" font-family="Arial" font-size="12" fill="#61705c">B = ${F(r.B,2)} m</text><text x="${x0+r.N*bw+(r.N-1)*gap+11}" y="${top+bh/2+4}" font-family="Arial" font-size="12" fill="#61705c">D</text></svg>`;
+}
+
+function chart(r,p){
+  const capacity=r.capacity??E.capacity(r.B,r.D,r.N,p),
+        xmax=Math.max(r.Q*1.2,capacity.Q*1.2,.1),
+        w=570,h=245,l=45,rr=17,t=22,b=35;
+  let pts=[];
+  for(let i=1;i<=70;i++){
+    let q=xmax*i/70, z=q/r.N/(r.B*r.D*Math.sqrt(2*p.g*r.D));
+    if(z<=E.branch) pts.push([q,E.poly(z)]);
+  }
+  const ymax=Math.max(p.hlimit*1.2,...pts.map(a=>a[1]))*1.05,
+        sx=x=>l+x/xmax*(w-l-rr), sy=y=>h-b-y/ymax*(h-t-b);
+  let svg='';
+  for(let i=0;i<=4;i++){
+    const y=ymax*i/4, x=xmax*i/4;
+    svg+=`<path d="M${l},${sy(y)}H${w-rr}" stroke="#e3e9de"/><text x="${l-7}" y="${sy(y)+4}" text-anchor="end">${F(y,1)}</text><text x="${sx(x)}" y="${h-b+18}" text-anchor="middle">${F(x,1)}</text>`;
+  }
+  const path=pts.map((a,i)=>`${i?'L':'M'}${sx(a[0]).toFixed(2)},${sy(a[1]).toFixed(2)}`).join(' ');
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Courbe H1/D en fonction du débit total."><g font-family="Arial" font-size="11" fill="#72806b">${svg}<text x="${l}" y="14">H₁ / D</text><text x="${w-rr}" y="${h-4}" text-anchor="end">Q total (m³/s)</text></g><path d="M${l},${sy(p.hlimit)}H${w-rr}" stroke="#b98a36" stroke-dasharray="5 4"/><path d="${path}" fill="none" stroke="#608e20" stroke-width="2.5"/>${r.hstar===null?'':`<circle cx="${sx(r.Q)}" cy="${sy(r.hstar)}" r="4.5" fill="#234734" stroke="white" stroke-width="1.5"/>`}</svg><div class="chartlegend"><span>Abaque numérisé</span><span class="amber">Limite H₁ / D</span></div><p class="hint">Point : débit étudié. La courbe ne calcule pas les remous ni l’effet du niveau aval.</p>`;
+}
+
+const row=(label,val,unit='')=>`<tr><td>${label}</td><td>${val} ${unit}</td></tr>`;
+const table=rows=>`<table class="values"><tbody>${rows.join('')}</tbody></table>`;
+
+function detail(r,p){
+  const c=r.capacity??E.capacity(r.B,r.D,r.N,p);
+  return `<article class="detail" id="detail">
+    <div class="dhead">
+      <div><h2>Résultats · ${dims(r)}</h2><p>${p.slopeMode==='critical'?'Pente critique recalculée (hypothèse BCEOM)':'Pente réelle imposée'}</p></div>
+      <span class="badge ${r.pass?'':'bad'}">${r.pass?'Présélection':'Non retenu'}</span>
+    </div>
+    <div class="dbody">
+      <div class="dgrid">
+        <div>
+          <h3>Paramètres hydrauliques</h3>
+          ${table([
+            row('Débit total Q',F(r.Q,3),'m³/s'),
+            row('Débit par cellule q',F(r.q,3),'m³/s'),
+            row('<b>Hauteur amont H₁</b>',`<b>${F(r.H1,3)}</b>`,'m'),
+            row('Rapport H₁ / D',F(r.hstar,3)),
+            row('Pente critique Ic',F(r.Ic*100,4),'%'),
+            row('Pente utilisée I',F(r.I*100,4),'%'),
+            row('Tirant résolu y',F(r.y,3),'m'),
+            row('Tirant critique yc',F(r.yc,3),'m'),
+            row('Remplissage y / D',F(r.fill*100,1),'%'),
+            row('Vitesse uniforme V',F(r.V,3),'m/s'),
+            row('Froude théorique',F(r.Fr,3)),
+            row('Rayon hydraulique R',F(r.R,3),'m'),
+            row('Section mouillée totale',F(r.area,3),'m²'),
+            row('Périmètre mouillé total',F(r.perimeter,3),'m')
+          ])}
+          <p class="hint">Les grandeurs à surface libre sont théoriques si y &gt; D. H₁ est mesuré au-dessus du radier d’entrée.</p>
+        </div>
+        <div>
+          <h3>Relation débit–hauteur amont</h3>
+          ${chart(r,p)}
+          <div class="subhead">Limites de débit pour cette section</div>
+          ${table([
+            row('Limite H₁ / D',F(c.limits.head,3),'m³/s'),
+            row('Limite y / D',F(c.limits.fill,3),'m³/s'),
+            row('Limite de vitesse',F(c.limits.velocity,3),'m³/s'),
+            row('Limite supérieure I ≥ Ic',F(c.limits.slope,3),'m³/s'),
+            row('<b>Débit capable retenu</b>',`<b>${F(c.Q,3)}</b>`,'m³/s')
+          ])}
+          <p class="hint">${c.reason??`Critère dimensionnant : ${names[c.governing]}.`}${p.slopeMode==='fixed'&&c.Q>0?` Intervalle admissible : ${F(c.lower,4)} à ${F(c.Q,4)} m³/s.`:''} « — » : pas de borne finie dans ce modèle.</p>
+        </div>
+      </div>
+      <div class="checks">
+        ${[['H₁ / D ≤ '+F(p.hlimit),r.hOK],['V ≤ '+F(p.vmax)+' m/s',r.vOK],['y / D ≤ '+F(p.fill,0)+' %',r.fillOK],[p.slopeMode==='critical'?'I = Ic · pente construite non vérifiée':'I ≥ Ic',r.slopeOK]].map(([l,ok])=>`<div class="check ${ok?'':'bad'}">${ok?'✓':'!'} ${l}</div>`).join('')}
+      </div>
+      <div class="note ${r.warnings.length?'':'neutral'}">
+        <b>${r.pass?'Critères numériques satisfaits dans les hypothèses retenues.':'Cette section ne satisfait pas tous les critères.'}</b>
+        ${r.warnings.length?`<ul>${r.warnings.map(t=>`<li>${t}</li>`).join('')}</ul>`:''}
+      </div>
+      <details class="calcsteps">
+        <summary>Voir les calculs intermédiaires</summary>
+        ${table([
+          row('Q*H₁',F(r.qH,7)),
+          row('Q*Ic',F(r.qIc,7)),
+          row('Ic*',F(r.Istar,7)),
+          row('Q*V à atteindre',F(r.qV,9)),
+          row('Q*V résolu',F(r.qResolved,9)),
+          row('X = y/B résolu',F(r.x,9)),
+          row('V*',F(r.vstar,9)),
+          row('Résidu relatif',r.residual.toExponential(2))
+        ])}
+        <p class="hint">H₁/D est obtenu par le polynôme issu de la numérisation de l’abaque BCEOM figure 77. Le détail des formules est présenté en bas de l’application.</p>
+      </details>
+    </div>
+  </article>`;
+}
+
+function card(a,i){
+  const N=i+1,r=a[0];
+  if(!r) return `<article class="card"><div class="cardtop"><h3>${N} cellule${N>1?'s':''}</h3><span class="badge warn">Aucune solution</span></div><div class="empty"><b>Aucune section ne satisfait tous les critères.</b>Vérifier le catalogue, le débit, les seuils et l’hypothèse de pente.</div></article>`;
+  const is=selected&&r.N===selected.N&&r.B===selected.B&&r.D===selected.D;
+  return `<article class="card ${is?'selected':''}">
+    <div class="cardtop"><h3>${N} cellule${N>1?'s':''}</h3><span class="badge">Présélection</span></div>
+    <div class="dim">${F(r.B,2)} × ${F(r.D,2)} <small>m / cellule</small></div>
+    ${sketch(r)}
+    <div class="mini">
+      <div><small>H₁</small><b>${F(r.H1)}</b><em>m</em></div>
+      <div><small>Vitesse</small><b>${F(r.V)}</b><em>m/s</em></div>
+      <div><small>Capacité</small><b>${F(r.capacity.Q)}</b><em>m³/s</em></div>
+    </div>
+    <button class="pick" data-pick="${i},0">${is?'Section affichée':'Examiner'} →</button>
+    ${a.length>1?`<details class="alt"><summary>${a.length-1} autres sections</summary>${a.slice(1).map((r,j)=>`<button data-pick="${i},${j+1}">${F(r.B,2)} × ${F(r.D,2)} m · V ${F(r.V)} m/s →</button>`).join('')}</details>`:''}
+  </article>`;
+}
+
+function printIntro(p){
+  return `<div class="printonly">
+    <img src="{{BRAND.logo}}" alt="{{BRAND.name}}">
+    <h1>Dalots BCEOM — Note de présélection</h1>
+    <p>${new Date().toLocaleDateString('fr-FR')}{{CREDIT_SUFFIX}}</p>
+    <p>Mode : ${mode==='propose'?'proposition de sections':mode==='verify'?'vérification':'débit capable'} ; Ks = ${p.Ks} m⅓/s ; g = ${p.g} m/s² ; pente : ${p.slopeMode==='critical'?'Ic recalculée (hypothèse BCEOM)':F(p.slope*100,5)+' % imposée'} ; H₁/D ≤ ${p.hlimit} ; y/D ≤ ${p.fill} % ; V ≤ ${p.vmax} m/s.</p>
+    <p class="print-source">Référence : <em>Hydraulique Routière</em>, Nguyen Van Tuu, BCEOM, 1981 (§4.3.3 à 4.3.5). Hypothèses : sortie aval libre, cellules identiques, régime permanent. Le polynôme H₁/D est une numérisation de l’abaque figure 77. Remous, surverse, affouillement et structure non calculés. Les seuils de capacité sont des limites : conserver une marge au projet.</p>
+  </div>`;
+}
+
+function render(){
+  let p=last, out=printIntro(p);
+  const actions=`<div class="actions"><button class="link" data-action="csv">↓ CSV</button><button class="link" data-action="print">Imprimer / PDF</button></div>`;
+  if(mode==='propose'){
+    out+=`<div class="reshead"><div><h2>Sections pour 1 à 4 cellules</h2><p>Classement par surface d’ouverture croissante.</p></div>${actions}</div>
+      <div class="strip">
+        <div><small>DÉBIT DE PROJET</small><strong>${F(p.Q,2)}</strong><em>m³/s</em></div>
+        <div><small>CONFIGURATIONS</small><strong>${groups.filter(a=>a.length).length}</strong><em>/ 4</em></div>
+        <div><small>PENTE DE CALCUL</small><strong>${p.slopeMode==='critical'?'Ic':F(p.slope*100,2)}</strong><em>${p.slopeMode==='critical'?'recalculée':'%'}</em></div>
+      </div>
+      <div class="cards">${groups.map(card).join('')}</div>
+      <p class="hint">Schémas au tirant uniforme résolu. Les capacités sont conditionnées par le mode de pente sélectionné.</p>`;
+    if(selected) out+=detail(selected,p);
+  } else {
+    out+=`<div class="reshead"><div><h2>${mode==='verify'?'Vérification de la section':'Débit capable de la section'}</h2><p>${p.N} × ${F(p.B,2)} × ${F(p.D,2)} m</p></div>${actions}</div>`;
+    if(!selected){
+      out+=`<div class="note"><b>Aucun débit compatible avec tous les critères.</b><p>${cap?.reason??''}</p></div>`;
+    } else {
+      const r=selected;
+      out+=`<div class="strip">
+        <div><small>${mode==='capacity'?'DÉBIT CAPABLE':'DÉBIT ÉTUDIÉ'}</small><strong>${F(r.Q,2)}</strong><em>m³/s</em></div>
+        <div><small>HAUTEUR AMONT</small><strong>${F(r.H1,2)}</strong><em>m</em></div>
+        <div><small>VITESSE</small><strong>${F(r.V,2)}</strong><em>m/s</em></div>
+      </div>`;
+      out+=detail(r,p);
+    }
+  }
+  out+=`<div class="note neutral no-print">${p.slopeMode==='critical'?'Calcul avec I = Ic (hypothèse BCEOM). La pente construite reste à vérifier.':'Calcul à pente imposée ; la validité du contrôle amont nécessite I ≥ Ic et une sortie libre.'} <a href="#method" data-action="method">Méthode et limites</a></div>`;
+  $('results').innerHTML=out;
+}
+
+function calculate(scroll=false){
+  $('error').hidden=true;
+  if(!$('form').reportValidity()) return false;
+  try{
+    const p=E.validate(read());
+    last=p; cap=null;
+    if(mode==='propose'){
+      groups=E.proposals(p);
+      selected=groups.find(a=>a.length)?.[0]??null;
+    } else {
+      cap=E.capacity(p.B,p.D,p.N,p);
+      const q=mode==='capacity'?cap.Q:p.Q;
+      selected=q>0?{...E.calculate(q,p.B,p.D,p.N,p),capacity:cap}:null;
+    }
+    dirty=false; render();
+    if(scroll&&innerWidth<701) document.querySelector('.right').scrollIntoView({behavior:'smooth'});
+    return true;
+  } catch(e){
+    $('error').textContent=e.message;
+    $('error').hidden=false;
+    return false;
+  }
+}
+
+function stale(){
+  if(dirty||!last) return;
+  dirty=true;
+  $('results').insertAdjacentHTML('afterbegin','<div class="stale-msg">Données modifiées. Relancer le calcul pour actualiser les résultats.</div>');
+  for(const c of $('results').children) if(!c.classList.contains('stale-msg')) c.classList.add('stale');
+}
+
+function slopeUI(){
+  $('slopewrap').hidden=$('slopeMode').value==='critical';
+  $('slopehint').textContent=$('slopeMode').value==='critical'
+    ?'Ic est recalculée pour chaque débit. La pente construite n’est pas vérifiée.'
+    :'Le tirant et la vitesse utilisent cette pente. I ≥ Ic est contrôlé pour la relation amont.';
+}
+
+function modeUI(){
+  document.querySelectorAll('[data-mode]').forEach(b=>{
+    b.classList.toggle('active',b.dataset.mode===mode);
+    b.setAttribute('aria-current',b.dataset.mode===mode?'page':'false');
+  });
+  $('qwrap').hidden=mode==='capacity';
+  $('Q').disabled=mode==='capacity';
+  $('geometry').hidden=mode==='propose';
+  ['B','D','N'].forEach(k=>$(k).disabled=mode==='propose');
+  ['Bmax','Dmax','step'].forEach(k=>$(k).disabled=mode!=='propose');
+  $('catalog').hidden=mode!=='propose';
+  $('run').innerHTML=(mode==='propose'?'Rechercher les sections':mode==='verify'?'Vérifier la section':'Calculer le débit capable')+' <span>↗</span>';
+  slopeUI();
+}
+
+function blob(content,type,name){
+  const url=URL.createObjectURL(new Blob([content],{type})),
+        a=document.createElement('a');
+  a.href=url; a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function csv(){
+  const rows=mode==='propose'?groups.flat():selected?[selected]:[];
+  const p=last;
+  let data=[
+    ['{{BRAND.name}} — Dalots BCEOM — PRESELECTION'],
+    {{CREDIT_CSV_ROW}}
+    ['Mode pente',p.slopeMode,'I imposee (%)',p.slope*100,'Ks',p.Ks,'g',p.g],
+    ['H1/D max',p.hlimit,'y/D max (%)',p.fill,'Vmax (m/s)',p.vmax],
+    ['Reference','Hydraulique Routiere, BCEOM, 1981 — abaque figure 77 numerisee'],
+    ['Hypotheses','Sortie aval libre; ecoulement permanent; cellules identiques; partage egal du debit'],
+    ['N','B m','D m','Q m3/s','q m3/s','H1 m','H1/D','Ic %','I %','y m','yc m','V m/s','Fr','Remplissage %','Qcap m3/s','Residual','Observations'],
+    ...rows.map(r=>[
+      r.N,r.B,r.D,r.Q,r.q,r.H1,r.hstar,r.Ic*100,r.I*100,r.y,r.yc,r.V,r.Fr,r.fill*100,
+      (r.capacity??E.capacity(r.B,r.D,r.N,p)).Q,r.residual,r.warnings.join(' | ')
+    ])
+  ];
+  if(!rows.length) data.push(['Aucun debit compatible',cap?.reason??'Aucune section du catalogue']);
+  blob('\uFEFF'+data.map(a=>a.map(v=>'"'+(typeof v==='number'?(Number.isFinite(v)?v.toPrecision(12).replace('.',','):''):String(v??'')).replace(/"/g,'""')+'"').join(';')).join('\r\n'),
+       'text/csv;charset=utf-8','{{BRAND.slug}}-BCEOM-resultats.csv');
+}
+
+$('form').onsubmit=e=>{e.preventDefault();calculate(true);};
+$('form').addEventListener('input',stale);
+$('form').addEventListener('change',stale);
+$('slopeMode').onchange=slopeUI;
+$('reset').onclick=()=>{$('form').reset();modeUI();calculate();};
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;modeUI();calculate();});
+$('results').onclick=e=>{
+  const a=e.target.closest('[data-action]');
+  if(a){
+    if(a.dataset.action==='method'){$('method').open=true;return;}
+    if(dirty){toast('Relancer le calcul avant l’export.');return;}
+    if(a.dataset.action==='csv') csv();
+    if(a.dataset.action==='print') window.print();
+  }
+  const b=e.target.closest('[data-pick]');
+  if(b){
+    if(dirty){toast('Relancer le calcul pour actualiser les sections.');return;}
+    const [i,j]=b.dataset.pick.split(',').map(Number);
+    selected=groups[i][j];
+    render();
+    $('detail').scrollIntoView({behavior:'smooth'});
+  }
+};
+$('portable').onclick=()=>{
+  if(location.protocol==='file:'){toast('Vous utilisez déjà la version autonome. Le logo est intégré : conservez uniquement ce fichier HTML.');return;}
+  const a=document.createElement('a');
+  a.href=location.href;
+  a.download='{{BRAND.slug}}-{{MODULE.id}}.html';
+  a.click();
+  toast('Ouvrez le fichier téléchargé dans votre navigateur, même hors connexion.');
+};
+
+modeUI();
+calculate();
+</script>
+</body>
+</html>

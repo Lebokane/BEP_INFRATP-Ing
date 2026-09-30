@@ -1,0 +1,61 @@
+/* Styles communs des nouveaux modules — mêmes codes visuels que les outils existants.
+   Les couleurs sont des jetons : le thème du client les remplace à la compilation. */
+:root{--green:#54800e;--lime:#89b82d;--forest:#234734;--ink:#28362e;--muted:#65736a;--line:#dce4db;--bg:#f3f6f2;--amber:#946119}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Arial,sans-serif}
+button,input,select{font:inherit}
+button,summary{cursor:pointer}
+a{color:var(--green)}
+[hidden]{display:none!important}
+
+header.mod{display:flex;align-items:center;justify-content:space-between;padding:19px max(28px,calc((100vw - 1470px)/2));background:#fff;border-bottom:1px solid var(--line);gap:18px}
+.identity{display:flex;align-items:center;gap:24px}
+.identity img{width:185px;height:auto;display:block}
+.appname{border-left:1px solid var(--line);padding-left:24px;font-size:21px;letter-spacing:1.5px;white-space:nowrap}
+.appname b{color:var(--green)}
+.appname span{display:block;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin-top:4px}
+
+main{max-width:1470px;padding:28px;margin:auto}
+.eyebrow{font-size:11px;letter-spacing:1.7px;color:var(--green);font-weight:700}
+h1{font-size:32px;letter-spacing:-.8px;margin:5px 0;font-weight:600}
+.lead{margin:6px 0 28px;color:var(--muted);font-size:15px}
+
+.workspace{display:grid;grid-template-columns:325px minmax(0,1fr);gap:24px;align-items:start}
+aside{background:#fff;border:1px solid var(--line);border-radius:7px}
+aside form{padding:21px}
+h2{font-size:19px;letter-spacing:-.3px;margin:0}
+.group{border-top:1px solid var(--line);padding-top:4px;margin-top:22px}
+.group h3{font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin:16px 0 10px}
+label{display:block;margin:14px 0 6px;font-size:14px}
+label span{float:right;font-size:12px;color:var(--muted)}
+input[type=number],select{width:100%;height:43px;border:1px solid #cdd8c8;background:#fbfcfa;padding:9px 10px;border-radius:4px;color:var(--ink);min-width:0}
+input:focus,select:focus{outline:2px solid var(--lime);border-color:transparent;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.hint{font-size:12px;color:var(--muted);line-height:1.65;margin:8px 0}
+.primary{width:100%;background:var(--forest);color:#fff;border:0;border-radius:4px;padding:13px 15px;margin-top:22px;font-size:15px;text-align:left}
+.link{border:0;padding:0;background:none;color:var(--green);font-size:13px}
+.error{background:#fff0e9;color:#a54b27;padding:10px;font-size:13px}
+
+.strip{display:grid;grid-template-columns:repeat(3,1fr);background:var(--forest);color:#fff;border-radius:7px;padding:23px 0;margin-bottom:20px}
+.strip>div{padding:0 24px;border-right:1px solid rgba(255,255,255,.2)}
+.strip>div:last-child{border:0}
+.strip small{font-size:11px;letter-spacing:.6px;opacity:.75;display:block;margin-bottom:8px}
+.strip strong{font-size:30px;font-weight:500;font-variant-numeric:tabular-nums}
+.strip em{font-size:13px;font-style:normal;opacity:.75;margin-left:5px}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:7px;padding:19px;min-width:0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:9px 6px;border-bottom:1px solid #e8eee3;text-align:left;font-weight:400}
+td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.note{background:#fff7e8;border-left:3px solid var(--amber);padding:12px 15px;margin-top:16px;font-size:13px;line-height:1.65}
+.note.ok{background:var(--bg);border-color:var(--lime)}
+.stale-msg{background:#fff1d8;color:#886229;padding:12px 15px;border:1px solid #e8d6b2;border-radius:4px;margin-bottom:15px;font-size:14px}
+.stale{opacity:.45}
+.method{border:1px solid var(--line);border-radius:7px;background:#fff;margin-top:28px;padding:0 23px}
+.method>summary{padding:20px 0;font-weight:600}
+.formula{background:var(--bg);border-left:3px solid var(--lime);padding:9px 13px;margin:8px 0;font-family:Georgia,serif}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:24px;color:var(--muted);font-size:12px}
+#kit-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--forest);color:#fff;padding:12px 20px;border-radius:5px;font-size:14px;z-index:30}
+
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.identity img{width:130px}.appname{font-size:16px}main{padding:22px 16px}header.mod{padding:14px 16px}.strip strong{font-size:23px}.strip>div{padding:0 12px}}
+@media print{body{background:#fff;font-size:11px}header.mod,aside,.no-print,.method{display:none!important}.workspace{display:block}main{padding:0}.strip{background:#fff;color:var(--ink);border:1px solid #ccc}@page{size:A4;margin:12mm}}

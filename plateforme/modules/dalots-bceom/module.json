@@ -1,0 +1,11 @@
+{
+  "id": "dalots-bceom",
+  "name": "Dalots · méthode BCEOM",
+  "category": "Hydraulique routière",
+  "version": "1.0.1",
+  "status": "stable",
+  "summary": "Proposer, vérifier et calculer le débit capable de dalots rectangulaires (1 à 4 cellules) selon l’Hydraulique Routière BCEOM.",
+  "methods": ["BCEOM 1981 — abaque fig. 77 numérisé", "Manning-Strickler", "Pente critique"],
+  "references": ["Nguyen Van Tuu, Hydraulique Routière, BCEOM, 1981"],
+  "tier": "standard"
+}

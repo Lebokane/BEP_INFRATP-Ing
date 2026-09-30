@@ -1,0 +1,11 @@
+{
+  "id": "chaussees",
+  "name": "Chaussées multicouche",
+  "category": "Chaussées",
+  "version": "2.0.0",
+  "status": "stable",
+  "summary": "Sollicitations d’une chaussée multicouche (Burmister), vérification LBTP 2024 ou NF P 98-086, épaisseur minimale.",
+  "methods": ["Burmister multicouche élastique", "LBTP 2024 Côte d’Ivoire", "NF P 98-086"],
+  "references": ["LBTP, Manuel de dimensionnement des chaussées neuves, 2024", "AFNOR NF P 98-086, 2019", "Huang, Pavement Analysis and Design, 2004"],
+  "tier": "pro"
+}

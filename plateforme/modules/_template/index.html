@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{BRAND.name}} · {{MODULE.name}}</title>
+<link rel="stylesheet" href="../../core/base.css">
+</head>
+<body>
+<header class="mod">
+  <div class="identity">
+    <img src="{{BRAND.logo}}" alt="{{BRAND.logoAlt}}">
+    <div class="appname">{{MODULE.name}}<span>VERSION {{MODULE.version}}</span></div>
+  </div>
+</header>
+<main>
+  <span class="eyebrow">{{BRAND.eyebrow}}</span>
+  <h1>{{MODULE.name}}</h1>
+  <p class="lead">Remplacer ce texte par l’objectif du module.</p>
+
+  <div class="workspace">
+    <aside>
+      <form id="form">
+        <h2>Données de calcul</h2>
+        <div class="group">
+          <h3>01 / Écoulement</h3>
+          <label for="Q">Débit Q <span>m³/s</span></label>
+          <input id="Q" type="number" value="10" min="0.001" step="any" required>
+          <div class="two">
+            <div><label for="B">Largeur B <span>m</span></label><input id="B" type="number" value="3" min="0.1" step="any" required></div>
+            <div><label for="S">Pente <span>%</span></label><input id="S" type="number" value="0.5" min="0.001" step="any" required></div>
+          </div>
+          <label for="n">Manning n <span>s/m⅓</span></label>
+          <input id="n" type="number" value="0.015" min="0.008" max="0.1" step="any" required>
+        </div>
+        <p id="error" class="error" role="alert" hidden></p>
+        <button class="primary" type="submit">Calculer ↗</button>
+      </form>
+    </aside>
+    <section id="results" aria-live="polite"></section>
+  </div>
+
+  <details class="method">
+    <summary>Méthode de calcul, hypothèses et limites</summary>
+    <div class="formula">Q = (1/n) · A · R^(2/3) · √S ; A = B·y ; R = A / (B + 2y)</div>
+    <p class="hint">Écoulement permanent et uniforme. Remplacer par la méthode du module et ses références.</p>
+  </details>
+
+  <footer>
+    <span>{{BRAND.fullName}}</span>
+    {{CREDIT_HTML}}
+    <span>{{MODULE.name}} · v{{MODULE.version}}</span>
+  </footer>
+</main>
+
+<script src="../../core/kit.js"></script>
+<script src="engine.js"></script>
+<script>
+'use strict';
+const $ = id => document.getElementById(id), { fmt } = Kit;
+const stale = Kit.watchStale($('form'), $('results'));
+let last = null;
+
+function render(r) {
+  const row = (l, v, u = '') => `<tr><td>${l}</td><td>${v} ${u}</td></tr>`;
+  $('results').innerHTML = `
+    <div class="strip">
+      <div><small>TIRANT NORMAL</small><strong>${fmt(r.yn, 3)}</strong><em>m</em></div>
+      <div><small>VITESSE</small><strong>${fmt(r.V)}</strong><em>m/s</em></div>
+      <div><small>RÉGIME</small><strong style="font-size:22px">${r.regime}</strong></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between"><h2>Résultats</h2>
+        <span class="no-print"><button class="link" id="csv">↓ CSV</button> · <button class="link" onclick="print()">Imprimer / PDF</button></span></div>
+      <table><tbody>
+        ${row('Tirant normal yₙ', fmt(r.yn, 3), 'm')}${row('Tirant critique y꜀', fmt(r.yc, 3), 'm')}
+        ${row('Vitesse V', fmt(r.V, 3), 'm/s')}${row('Froude', fmt(r.Fr, 3))}
+      </tbody></table>
+      <div class="note ${r.warnings.length ? '' : 'ok'}">${r.warnings.length ? r.warnings.map(Kit.esc).join('<br>') : 'Aucune alerte dans les hypothèses retenues.'}</div>
+    </div>`;
+  $('csv').onclick = () => Kit.csv('{{BRAND.slug}}-{{MODULE.id}}.csv', [
+    ['{{BRAND.name}} — {{MODULE.name}} v{{MODULE.version}}'],
+    ['Q m3/s', 'B m', 'n', 'S', 'yn m', 'yc m', 'V m/s', 'Fr'],
+    [r.Q, r.B, r.n, r.S, r.yn, r.yc, r.V, r.Fr],
+  ]);
+}
+
+function calculate() {
+  $('error').hidden = true;
+  if (!$('form').reportValidity()) return;
+  try {
+    const p = Kit.readNumbers($('form'));
+    p.S /= 100;
+    last = Engine.calculate(p);
+    stale.reset();
+    render(last);
+  } catch (e) {
+    $('error').textContent = e.message;
+    $('error').hidden = false;
+  }
+}
+
+$('form').onsubmit = e => { e.preventDefault(); calculate(); };
+calculate();
+</script>
+</body>
+</html>
