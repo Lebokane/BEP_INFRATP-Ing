@@ -5,6 +5,7 @@ on:
     paths: ['plateforme/**', '.github/workflows/plateforme.yml']
   pull_request:
     paths: ['plateforme/**', '.github/workflows/plateforme.yml']
+  workflow_dispatch:
 
 jobs:
   test-build:
@@ -23,3 +24,40 @@ jobs:
         with:
           name: plateforme-dist
           path: plateforme/dist
+
+  # Mise en ligne de la plateforme INFRATP sur Cloudflare Pages (accès protégé par Cloudflare Access).
+  # Uniquement depuis la branche main, et seulement si les secrets Cloudflare sont configurés.
+  deploy-infratp:
+    needs: test-build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency: deploy-infratp
+    environment:
+      name: infratp
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - name: Vérifier la configuration Cloudflare
+        id: check
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$TOKEN" ] || [ -z "$ACCOUNT" ]; then
+            echo "::warning::Secrets CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID absents : déploiement ignoré (voir plateforme/docs/MISE_EN_LIGNE.md)."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/download-artifact@v4
+        if: steps.check.outputs.ready == 'true'
+        with:
+          name: plateforme-dist
+          path: dist
+      - name: Déployer sur Cloudflare Pages
+        id: deploy
+        if: steps.check.outputs.ready == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist/infratp --project-name=kalc-infratp --branch=main --commit-dirty=true

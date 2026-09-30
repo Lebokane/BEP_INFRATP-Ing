@@ -54,4 +54,5 @@ Le même `engine.js` est exécuté par le navigateur et par les tests Node, ce q
 - [Ajouter un module](docs/AJOUTER_UN_MODULE.md)
 - [Ajouter un client / personnaliser](docs/NOUVEAU_CLIENT.md)
 - [Commercialisation et feuille de route SaaS](docs/SAAS.md)
-- [Points techniques à confirmer](docs/POINTS_TECHNIQUES.md)
+- [Points techniques](docs/POINTS_TECHNIQUES.md)
+- [Mise en ligne (Cloudflare Pages + Access)](docs/MISE_EN_LIGNE.md)

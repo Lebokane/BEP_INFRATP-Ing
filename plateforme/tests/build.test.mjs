@@ -48,6 +48,15 @@ test('les couleurs du client sont appliquées', () => {
   assert.ok(html.includes(`--forest:${t.theme.forest}`));
 });
 
+test('en-têtes de sécurité et non-indexation générés pour chaque client', () => {
+  for (const id in built) {
+    const h = fs.readFileSync(path.join(OUT, id, '_headers'), 'utf8');
+    assert.match(h, /Content-Security-Policy: default-src 'none'/);
+    assert.match(h, /X-Robots-Tag: noindex/);
+    assert.match(fs.readFileSync(path.join(OUT, id, 'robots.txt'), 'utf8'), /Disallow: \//);
+  }
+});
+
 test('un marqueur inconnu arrête la compilation', () => {
   assert.throws(() => fillTokens('{{BRAND.inconnu}}', {}, 'test'), /Marqueur inconnu/);
 });

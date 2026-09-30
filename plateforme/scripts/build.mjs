@@ -113,6 +113,20 @@ export function buildPortal(tenant, prod, mods) {
   return html.replace('</head>', `${themeCSS(tenant)}\n</head>`);
 }
 
+// Les pages sont autonomes : scripts et styles en ligne, images en data URI, aucun appel réseau.
+export const CSP = [
+  "default-src 'none'", "script-src 'unsafe-inline'", "style-src 'unsafe-inline'", "img-src data:",
+  "connect-src 'self'", "base-uri 'none'", "form-action 'none'", "frame-ancestors 'none'",
+].join('; ');
+const HEADERS = `/*
+  Content-Security-Policy: ${CSP}
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  X-Robots-Tag: noindex, nofollow
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+`;
+
 export function buildTenant(tenant, outRoot = OUT) {
   const prod = product();
   const mods = enabledModules(tenant, listModules());
@@ -128,6 +142,9 @@ export function buildTenant(tenant, outRoot = OUT) {
     modules: mods.map(({ dir, ...m }) => ({ ...m, path: `modules/${m.id}.html` })),
   };
   fs.writeFileSync(path.join(out, 'registry.json'), JSON.stringify(registry, null, 2));
+  // Fichiers d’hébergement (Cloudflare Pages, Netlify) : en-têtes de sécurité et non-indexation.
+  fs.writeFileSync(path.join(out, '_headers'), HEADERS);
+  fs.writeFileSync(path.join(out, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
   return { out, modules: mods.map(m => m.id) };
 }
 
