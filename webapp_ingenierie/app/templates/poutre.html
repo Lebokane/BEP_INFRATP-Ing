@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Poutre isostatique{% endblock %}
+{% block content %}
+<h1>Poutre isostatique – charge uniforme</h1>
+<form method="post">
+  <label>Portée L (m) <input name="portee" type="number" step="any" value="{{ form.get('portee', '6') }}" required></label>
+  <label>Charge q (kN/m) <input name="charge" type="number" step="any" value="{{ form.get('charge', '10') }}" required></label>
+  <label>Module E (MPa) <input name="E" type="number" step="any" value="{{ form.get('E', '210000') }}" required></label>
+  <label>Inertie I (cm⁴) <input name="I" type="number" step="any" value="{{ form.get('I', '8356') }}" required></label>
+  <button type="submit">Calculer</button>
+</form>
+{% if erreur %}<p class="erreur">{{ erreur }}</p>{% endif %}
+{% if resultat %}
+<table>
+  <tr><th>Moment max</th><td>{{ '%.2f'|format(resultat.moment_max) }} kN·m</td></tr>
+  <tr><th>Effort tranchant max</th><td>{{ '%.2f'|format(resultat.tranchant_max) }} kN</td></tr>
+  <tr><th>Flèche max</th><td>{{ '%.2f'|format(resultat.fleche_max) }} mm</td></tr>
+  <tr><th>Flèche admissible (L/300)</th><td>{{ '%.2f'|format(resultat.fleche_admissible) }} mm</td></tr>
+  <tr><th>Vérification</th><td>{{ 'OK' if resultat.fleche_max <= resultat.fleche_admissible else 'NON VÉRIFIÉ' }}</td></tr>
+</table>
+{% endif %}
+{% endblock %}
