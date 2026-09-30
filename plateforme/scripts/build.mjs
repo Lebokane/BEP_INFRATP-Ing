@@ -57,7 +57,7 @@ export function themeCSS(t) {
 function platformBar(tenant, mod) {
   return `<nav class="plat-bar" aria-label="Plateforme"><a href="../index.html">← ${escapeHTML(tenant.portal?.title || 'Tous les modules')}</a><span>${escapeHTML(mod.name)} · v${mod.version}</span></nav>
 <style>.plat-bar{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:7px max(16px,calc((100vw - 1470px)/2));background:var(--forest);color:#fff;font:13px/1.4 Arial,sans-serif}.plat-bar a{color:#fff;text-decoration:none;font-weight:600}.plat-bar span{opacity:.75}@media print{.plat-bar{display:none!important}}</style>
-<script>if(location.protocol==='file:')document.currentScript.previousElementSibling.previousElementSibling.hidden=true;</script>`;
+<script>if(!/^https?:$/.test(location.protocol))document.currentScript.previousElementSibling.previousElementSibling.hidden=true;</script>`;
 }
 
 export function tokensFor(tenant, prod, mod) {
